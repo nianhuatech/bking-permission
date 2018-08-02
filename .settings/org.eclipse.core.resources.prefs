@@ -1,0 +1,15 @@
+eclipse.preferences.version=1
+encoding//account/accounts.py=utf-8
+encoding//account/backends.py=utf-8
+encoding//account/decorators.py=utf-8
+encoding//account/forms.py=utf-8
+encoding//account/middlewares.py=utf-8
+encoding//account/models.py=utf-8
+encoding//account/urls.py=utf-8
+encoding//conf/default.py=utf-8
+encoding//conf/settings_development.py=utf-8
+encoding//home_application/models.py=utf-8
+encoding//home_application/urls.py=utf-8
+encoding//home_application/views.py=utf-8
+encoding/manage.py=utf-8
+encoding/settings.py=utf-8

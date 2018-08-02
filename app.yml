@@ -1,0 +1,13 @@
+app_code: confcheck
+app_name: 应用配置检查
+author: 贵州年华
+category: 应用工具
+introduction: 应用配置检查
+version: 1.0.1
+language: python
+is_use_celery: True
+desktop:
+    width: 1200
+    height: 720
+    is_max: False
+date: 2018-07-11 12:00:00
