@@ -37,7 +37,7 @@ class BkingBusiness(models.Model):
     
 
 """
-基础数据models.应用模型
+基础数据models.应用模 型
 """
 class BkingApplication(models.Model):
     gender = (

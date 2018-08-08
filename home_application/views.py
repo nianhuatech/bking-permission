@@ -89,7 +89,7 @@ def do_modify_business(req):
     except Exception, e:
         logger.error('modify object for BkingBusiness is error:{}'.format(repr(e))) 
         return render_json({'code':False, 'msg':u"数据保存失败:{}".format(repr(e))})
-    bis_name = req.POST.get("bis_name")
+    bis_name = req.POST.get("bis_name") 
     mark = req.POST.get("mark")
     status = req.POST.get("status")
     if bis_name == None or bis_name == "":
