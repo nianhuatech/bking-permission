@@ -19,7 +19,7 @@ class BkingBusiness(models.Model):
         ('0', "有效"),
         ('1', "无效"),
     )
-    bis_id=models.BigIntegerField(u"业务ID",primary_key=True)
+    bis_id=models.AutoField(u"业务ID",primary_key=True)
     bis_name=models.CharField(u"业务名称",max_length=255)
     status=models.IntegerField(u"业务状态",choices=gender, default=0)
     create_date=models.DateTimeField(u"创建时间",auto_now_add=True)
@@ -44,7 +44,7 @@ class BkingApplication(models.Model):
         ('0', "有效"),
         ('1', "无效"),
     )
-    app_id=models.BigIntegerField(u"应用ID",primary_key=True)
+    app_id=models.AutoField(u"应用ID",primary_key=True)
     app_name=models.CharField(u"应用名称",max_length=255)
     app_type=models.IntegerField(u"应用类型")
     app_exec_file=models.CharField(u"执行文件",max_length=1000)
@@ -108,7 +108,7 @@ class BkingBisApplicationRel(models.Model):
 基础数据models.主机账号模型
 """
 class BkingHostAccount(models.Model):
-    host_account_id=models.BigIntegerField(u"主机账号ID",primary_key=True)
+    host_account_id=models.AutoField(u"主机账号ID",primary_key=True)
     host_name=models.CharField(u"主机名",max_length=255)
     account_name=models.CharField(u"账号名称",max_length=255)
     host_ip=models.GenericIPAddressField(u"主机IP")
@@ -158,6 +158,8 @@ class Dicts (models.Model):
     dict_name=models.CharField(u"字典名称",max_length=255)
     dict_status=models.IntegerField(u"字典状态")
     dict_mark=models.CharField(u"字典备注",max_length=1000,null=True,blank=True)
+
+
         
         
 

@@ -13,7 +13,7 @@ from common.mymako import render_mako_context, render_json
 from blueking.component.shortcuts import get_client_by_request,get_client_by_user
 from doctest import script_from_examples
 from conf.default import STATICFILES_DIRS
-from home_application.models import BkingBusiness,BkingBisApplicationRel,BkingApplication,Dicts
+from home_application.models import BkingBusiness,BkingBisApplicationRel,BkingApplication,Dicts,BkingBisApplicationRel,BkingApplicationHostRel
 import os,base64,copy,datetime,re,json
 from django.core import serializers
 from common.log import logger
@@ -65,9 +65,12 @@ def do_add_business(req):
     mark = req.POST.get("mark")
     if bis_name == None or bis_name == "":
         return render_json({'code':False, 'msg':u"业务名称不能为空"})
-    bis = BkingBusiness.objects.get(bis_name=bis_name)
-    if bis:
-        return render_json({'code':False, 'msg':u"业务名称【"+bis_name+u"】已存在"})
+    try:
+        bis = BkingBusiness.objects.get(bis_name=bis_name)
+        if bis:
+            return render_json({'code':False, 'msg':u"业务名称【"+bis_name+u"】已存在"})
+    except:
+        pass
     try:
         BkingBusiness.objects.create(bis_name=bis_name,mark=mark,create_op=user_name,status=0)
         logger.info('insert object to BkingBusiness is success')
@@ -91,9 +94,12 @@ def do_modify_business(req):
     status = req.POST.get("status")
     if bis_name == None or bis_name == "":
         return render_json({'code':False, 'msg':u"业务名称不能为空"})
-    bis = BkingBusiness.objects.get(bis_name=bis_name)
-    if bis and bis.bis_id != bis_id:
-        return render_json({'code':False, 'msg':u"业务名称【"+bis_name+u"】已被占用"})
+    try:
+        bis = BkingBusiness.objects.get(bis_name=bis_name)
+        if bis and bis.bis_id != bis_id:
+            return render_json({'code':False, 'msg':u"业务名称【"+bis_name+u"】已被占用"})
+    except:
+        pass
     business.bis_name = bis_name
     business.mark = mark
     business.status = status
@@ -188,9 +194,12 @@ def do_add_application(req):
     status = 0
     if app_name == None or app_name == "":
         return render_json({'code':False, 'msg':u"应用名称不能为空"})
-    app = BkingApplication.objects.get(app_name=app_name)
-    if app:
-        return render_json({'code':False, 'msg':u"应用名称【"+app_name+u"】已存在"})
+    try:
+        app = BkingApplication.objects.get(app_name=app_name)
+        if app:
+            return render_json({'code':False, 'msg':u"应用名称【"+app_name+u"】已存在"})
+    except:
+        pass
     try:
         BkingApplication.objects.create(app_name=app_name,app_type=app_type,app_exec_file=app_exec_file,mark=mark,create_op=user_name,status=status)
         logger.info('insert object to BkingApplication is success')
@@ -216,9 +225,12 @@ def do_modify_application(req):
     status = req.POST.get("status")
     if app_name == None or app_name == "":
         return render_json({'code':False, 'msg':u"应用名称不能为空"})
-    app_temp = BkingApplication.objects.get(app_name=app_name)
-    if app_temp and app_temp.app_id != app_id:
-        return render_json({'code':False, 'msg':u"应用名称【"+app_name+u"】已被占用"})
+    try:
+        app_temp = BkingApplication.objects.get(app_name=app_name)
+        if app_temp and app_temp.app_id != app_id:
+            return render_json({'code':False, 'msg':u"应用名称【"+app_name+u"】已被占用"})
+    except:
+        pass
     app.app_name = app_name
     app.app_type = app_type
     app.app_exec_file = app_exec_file
