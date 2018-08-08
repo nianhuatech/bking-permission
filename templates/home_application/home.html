@@ -18,8 +18,183 @@
 					<p>若想体验快速开发应用的功能，请前往<a class="developer-center" href="${BK_PAAS_HOST}" target="_blank">“开发者中心”</a>。</p>
 				</div>
 				<!-- 蓝鲸智云开发框架说明  End -->
+				<button id="doAdd" onclick="doClick()">测试新增</button>
+				<button id="doModify" onclick="doClick2()">测试修改</button>
+				<button id="doDelDict" onclick="doClick3()">测试删除</button>
+				<button id="getPagingList" onclick="doClick4()">测试查询</button>
+				<button id="getPagingList2" onclick="doClick5()">测试查询2</button>
+				<button id="getPagingList3" onclick="doClick6()">测试查询3</button>
 			</div>
 		</div>
     </div>
 </%block>
+<<script type="text/javascript">
 
+function doClick(){
+	$.post(site_url+"do_add_application_type/",{
+		'dict_class':"dict_class",
+		'dict_type':"dict_type2",
+		'dict_name':"dict_name",
+		'dict_code':"dict_value",  
+		'dict_status':0,
+		'dict_mark':"dict_mark"
+		},function(res){
+			if (res.code) {	
+				alert(res.msg);
+			}else {
+				alert(res.msg);
+			}
+		}, 'json');	 
+	/* app_name=models.CharField(u"应用名称",max_length=255)
+    app_in_host=models.CharField(u"应用所属主机",max_length=255)
+    app_type=models.IntegerField(u"应用类型")
+    app_exe_file_path=models.CharField(u"应用执行文件路径",max_length=1000)
+    app_config_file_path=models.CharField(u"应用配置路径",max_length=1000)
+    app_src_path=models.CharField(u"应用源路径",max_length=1000)
+    app_bak_path=models.CharField(u"应用备份路径",max_length=1000)
+    app_check_cycle=models.IntegerField(u"检查周期(秒)")
+    app_status=models.IntegerField(u"应用状态")
+    app_create_time=models.DateField(u"创建时间")
+    app_creator=models.CharField(u"创建人",max_length=10)
+    app_mark=models.CharField(u"应用备注",max_length=1000,null=True,blank=True)
+    app_last_bak_time=models.DateField(u"最后备份时间") */
+	/*
+	$.post(site_url+"doAddAPPConfig/",{
+		'app_name':"app_name",
+		'app_host_ip':"app_host_ip",
+		'app_type':1,
+		'app_exe_file_path':"app_exe_file_path",  
+		'app_config_file_path':"app_config_file_path",
+		'app_biz_id':1234,
+		'host_os_type':"host_os_type",
+		'host_source':"host_source",
+		'app_biz_name':"app_biz_name",
+		'app_bak_path':"app_bak_path",  
+		'app_check_cycle':10000,
+		'app_mark':"app_mark"
+		},function(res){
+			if (res.code) {	
+				alert(res.text);
+			}else {
+				alert(res.text);
+			}
+		}, 'json');	
+		*/
+}
+
+function doClick2(){
+	/* $.post(site_url+"doModifyDict/",{
+		'id':1,
+		'dict_class':"dict_class2",
+		'dict_type':"dict_type2",
+		'dict_name':"dict_name2",
+		'dict_value':"dict_value2",  
+		'dict_status':1,
+		'dict_mark':"dict_mark2"
+		},function(res){
+			if (res.code) {	
+				alert(res.text);
+			}else {
+				alert(res.text);
+			}
+		}, 'json');	 */ 
+	$.post(site_url+"get_user_biz/",{
+		'id':2,
+		'app_name':"app_name2",
+		'app_in_host':"app_in_host2",
+		'app_type':1,
+		'app_exe_file_path':"app_exe_file_path2",  
+		'app_config_file_path':"app_config_file_path2",
+		'app_src_path':"app_src_path2",
+		'app_bak_path':"app_bak_path",  
+		'app_check_cycle':10000,
+		'app_mark':"app_mark"
+		},function(res){
+			if (res.code) {	
+				alert(res.text);
+			}else {
+				alert(res.text);
+			}
+		}, 'json');	
+}
+
+function doClick3(){
+	/* $.post(site_url+"doDelDict/",{
+		'id':3
+		},function(res){
+			if (res.code) {	
+				alert(res.text);
+			}else {
+				alert(res.text);
+			}
+		}, 'json');	 */ 
+	$.post(site_url+"doDelAPPConfig/",{
+		'id':3
+		},function(res){
+			if (res.code) {	
+				alert(res.text);
+			}else {
+				alert(res.text);
+			}
+		}, 'json');	
+}
+
+function doClick4(){
+	/* $.post(site_url+"getPagingDictList/",{
+		'pageSize':20,
+		'pageNumber':1
+		},function(res){
+			if (res.code) {	
+				//alert( res.toJSONString());
+				alert(JSON.stringify(res));
+				console.log(eval(JSON.stringify(res)));
+			}else {
+				alert(res.text);
+			}
+		}, 'json');	   */
+	 $.post(site_url+"getPagingAPPConfigList/",{
+		'pageSize':5,
+		'pageNumber':1
+		},function(res){
+			if (res.code) {	
+				alert(res.text);
+				alert(JSON.stringify(res));
+				console.log(JSON.stringify(res));
+			}else {
+				alert(res.text);
+			}
+		}, 'json'); 
+}
+
+function doClick5(){
+	$.post(site_url+"exec_task_test/",{
+		'id':1
+		},function(res){
+			if (res.code) {	
+				//alert( res.toJSONString());
+				alert(JSON.stringify(res));
+				console.log(JSON.stringify(res));
+			}else {
+				alert(res.text);
+			}
+		}, 'json');
+}
+
+function doClick6(){
+	$.post(site_url+"get_paging_application_type/",{
+		'app_name':"app_name",
+		'bis_name':"bis_name",
+		'pageSize':10,
+		'pageNumber':1
+		},function(res){
+			if (res.code) {	
+				//alert( res.toJSONString());
+				alert(JSON.stringify(res));
+				console.log(JSON.stringify(res));
+			}else {
+				alert(res.text);
+			}
+		}, 'json');
+}
+
+</script>

@@ -15,5 +15,60 @@ urlpatterns = patterns(
     'home_application.views',
     (r'^$', 'home'),
     (r'^dev-guide/$', 'dev_guide'),
+    (r'^login/$', 'login'),
     (r'^contactus/$', 'contactus'),
+    #业务操作接口------
+    #新增业务操作
+    (r'^do_add_business/$', 'do_add_business'),
+    #修改业务操作
+    (r'^do_modify_business/$', 'do_modify_business'),
+    #删除业务操作
+    (r'^do_del_business/$', 'do_del_business'),
+    #查询单个业务信息，根据bis_id
+    (r'^get_business/$', 'get_business'),
+    #分页查询业务数据
+    (r'^get_business_paging/$', 'get_business_paging'),
+    #新增应用数据操作
+    (r'^do_add_application/$', 'do_add_application'),
+    #修改应用数据操作
+    (r'^do_modify_application/$', 'do_modify_application'),
+    #删除应用数据操作
+    (r'^do_del_application/$', 'do_del_application'),
+    #查询单个应用数据操作
+    (r'^get_application/$', 'get_application'),
+    #分页查询应用数据操作
+    (r'^get_application_paging/$', 'get_application_paging'),
+    #新增应用类型数据操作
+    (r'^do_add_application_type/$', 'do_add_application_type'),
+    #修改应用类型数据操作
+    (r'^do_modify_application_type/$', 'do_modify_application_type'),
+    #删除应用类型数据操作
+    (r'^do_del_application_type/$', 'do_del_application_type'),
+    #查询应用类型数据枚举操作-不分页
+    (r'^get_dict_application_type/$', 'get_dict_application_type'),
+    #查询单个应用类型数据操作
+    (r'^get_dict_by_id/$', 'get_dict_by_id'),
+    #分页查询应用类型
+    (r'^get_paging_application_type/$', 'get_paging_application_type'),
+    #新增业务应用关系数据操作
+    (r'^do_add_bis_application_rel/$', 'do_add_bis_application_rel'),
+    #修改业务应用关系数据操作
+    (r'^do_modify_bis_application_rel/$', 'do_modify_bis_application_rel'),
+    #删除业务应用关系数据操作
+    (r'^do_del_bis_application_rel/$', 'do_del_bis_application_rel'),
+    #查询单个业务应用关系数据操作
+    (r'^get_bis_application_rel/$', 'get_bis_application_rel'),
+    #分页查询业务应用关系数据操作
+    (r'^get_bis_application_rel_paging/$', 'get_bis_application_rel_paging'),
+    #新增应用和主机账号关系数据操作
+    (r'^do_add_application_host_rel/$', 'do_add_application_host_rel'),
+    #修改应用和主机账号关系数据操作
+    (r'^do_modify_application_host_rel/$', 'do_modify_application_host_rel'),
+    #删除应用和主机账号关系数据操作
+    (r'^do_del_application_host_rel/$', 'do_del_application_host_rel'),
+    #查询单个应用和主机账号关系数据操作
+    (r'^get_application_host_rel/$', 'get_application_host_rel'),
+    #分页查询应用和主机账号关系数据操作
+    (r'^get_application_host_rel_paging/$', 'get_application_host_rel_paging'),
+    
 )
