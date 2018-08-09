@@ -28,16 +28,12 @@
 		</div>
     </div>
 </%block>
-<<script type="text/javascript">
+<script type="text/javascript">
 
 function doClick(){
-	$.post(site_url+"do_add_application_type/",{
-		'dict_class':"dict_class",
-		'dict_type':"dict_type2",
-		'dict_name':"dict_name",
-		'dict_code':"dict_value",  
-		'dict_status':0,
-		'dict_mark':"dict_mark"
+	$.post(site_url+"do_add_business/",{
+		'bis_name':"bis_name",
+		'mark':"mark"
 		},function(res){
 			if (res.code) {	
 				alert(res.msg);

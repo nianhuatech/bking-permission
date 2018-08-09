@@ -24,11 +24,11 @@ import time
 """
 ================视图操作start========================
 """
-def home(request):
+def index(request):
     """
     首页
     """
-    return render_mako_context(request, '/home_application/home.html')
+    return render_mako_context(request, '/home_application/index.html')
 
 def login(rq):
     """
@@ -105,7 +105,7 @@ def do_modify_business(req):
     business.status = status
     try:
         business.save()
-        logger.error('modify object for BkingBusiness is success:{}'.format(repr(e))) 
+        logger.error('modify object for BkingBusiness is success:{}') 
         return render_json({'code':True, 'msg':u"数据保存成功"})
     except Exception, e:
         logger.error('modify object for BkingBusiness is error:{}'.format(repr(e))) 

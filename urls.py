@@ -26,6 +26,7 @@ urlpatterns = patterns(
     url(r'^app_control/', include('app_control.urls')),
     # 在home_application(根应用)里开始开发你的应用的主要功能
     url(r'^', include('home_application.urls')),
+    url(r'^', include('system_permission.urls')),
 )
 
 
