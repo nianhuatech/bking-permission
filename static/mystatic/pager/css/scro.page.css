@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+
+div.scroPage {
+	margin-bottom: 10px;
+}
+div.scroPage li {
+	height: 24px;
+	line-height: 24px;
+}
+div.scroPage li a {
+	padding: 2px 10px;
+}
+div.scroPage li.scroPageList {
+	
+}
+div.scroPage li.scroPageList a {
+	line-height: 24px;
+	height: 24px;
+}
+div.scroPage li.scroPageList select{
+	margin: 0px;
+	width: auto !important;
+	vertical-align: middle;
+	height: 22px;
+	line-height: 22px;
+	font-size: 12px;
+	padding: 0px;
+	margin-top: -2px;
+	display: inline-block;
+}
+div.scroPage.scroPageRight{
+	text-align: right;
+}

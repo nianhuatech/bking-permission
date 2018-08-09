@@ -1,0 +1,12 @@
+body{margin:0 auto;padding:0;font-size:16px;font-family:\5FAE\8F6F\96C5\9ED1,"微软雅黑";background:#fff;}
+ul,dl,dd,h1,h2,h3,h4,h5,h6,form,p,input{padding:0px;margin:0px;font-weight:normal;}
+ul{list-style:none;}
+img{border:0px;}
+.container a{text-decoration:none;outline:none;transition:color 0.2s ease 0s;}
+.container a:active{outline: none;star:expression(this.onFocus=this.blur());}
+.clearfloat{display:block;clear:both;height:0px;margin:0px;padding:0px;border:0px;}
+.container{width:100%;margin:0 auto;padding: 0;margin: 0;}
+ input{-outline:none;}
+
+
+

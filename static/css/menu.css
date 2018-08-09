@@ -1,0 +1,68 @@
+.menu{position: fixed;left: 0;top: 0;bottom: 0;width: 15%;height: 100%;background-color: #393c4b;}
+.menu ul .nav1{display:block;background: url(../img/sz.png) 30px 90px no-repeat;background-size:20px 20px;list-style:none;overflow:visible;text-align: center;line-height: 40px;}
+.menu ul .nav2{display:block;background: url(../img/sz.png) 30px 10px no-repeat;background-size:20px 20px;list-style:none;overflow:visible;text-align: center;line-height: 40px;}
+.menu ul li a{display:block;height:40px;margin-top:0px;font-size:14px;color:#FFFFFF;outline:none;display: inline-block;width: 100%;text-decoration:none;}
+.menu ul li .active{background:url(../img/sj.png) 90% 16px no-repeat;background-size: 11px 5px;}
+.menu ul li .inactive{background:url(../img/sj2.png) 90% 14px no-repeat;background-size: 5px 11px;}
+.menu ul li ul{display:none;margin-top:-4px;width: 100%;}
+.menu ul li ul li{display:block;background-color:#2a2a34;font-size:12px;list-style:circle;color:#c0c1c3;width: 100%;line-height: 40px;}
+.menu ul li ul li a{background:none;font-size:10px;color:#c0c1c3;padding-left:0px;display: inline-block;}
+.menu ul li ul li a:hover{background: #029688;color: #FFFFFF;}
+.nav_top{width: calc(100% - 15%);height: 80px;background-color: #393c4b;line-height: 80px;margin-left: 15%;position: fixed;right: 0;top: 0;z-index: 999999;}
+.logo{width: 100%;height: 80px;float: left;}
+.logo .p{text-align: center;color: #FFFFFF;font-size: 20px;line-height: 80px;height: 80px;}
+.nav_top .img{width: 30px;height: 20px;float: left;margin-top: 30px;}
+.nav_top .xt{float: left;margin-left: 10%;}
+.nav_top .jk{float: left;margin-left: 10%;}
+.nav_top a{color: #FFFFFF;font-size: 14px;}
+.nav_top .x_right{position: relative;float: right;right: 2%;}
+.dropdown{color: #FFFFFF;}
+.dropdown .btn{padding: 0;margin: 0;}
+.dropdown .btn:hover{color: #FFFFFF;}
+/*导航栏点击样式*/
+.active_li {background: #068e82 !important;}
+.active_li span {color: #fff !important;}
+
+.content{width: calc(100% - 21%);margin-left: 18%;padding-top: 95px;}
+.content .collect{width: 68%;margin: 0;padding: 0;}
+.content .collect .collecting{float: left;margin-top: 16px;margin-right: 40px;}
+.content .collect .collecting label{padding: 2px 10px;font-size: 14px;margin-bottom: 0;}
+.content .collect .collecting input{font-size: 14px;height: 22px;}
+.content .collect button{height: 22px;border: none;color: #FFFFFF;width: 30px;line-height: 22px;float: left;margin-left: 10px;background: #068e82;border-radius: 2px;margin-top: 16px;}
+.content .division{border: 1px solid #ADADAD;margin-top: 16px;}
+.content .tr{width: 100%;margin-top: 16px;}
+.content .tr li{border: 1px solid #ADADAD;text-align: center;background-color: #99908b;font-size: 14px;float: left;width: calc(100% / 6);overflow: hidden;}
+.content .tr2{width: 100%;margin-top: 16px;}
+.content .tr2 li{border: 1px solid #ADADAD;text-align: center;background-color: #99908b;font-size: 14px;float: left;width: calc(100% / 7);overflow: hidden;}
+/*.context .click{width: 100%;}*/
+.content .button{width: 8%;text-align: center;background: #068e82;border-radius: 3px;margin-top: 16px;line-height: 30px;color: #FFFFFF;cursor:pointer;border: none;}
+.content #page{position: fixed;bottom: 0;left: 20%;}
+/*弹出框*/
+.mask{background: #000000;opacity: 0.3;width: 100%;height: 100%;position: fixed;top: 0;left: 0;display: none;z-index: 88888;}
+.box .form{width: 50%;position: absolute;left: 50%;margin-left: -25%;margin-top:-50px;background: #FFFFFF;z-index: 99999;display: none;}
+.box .form .group{width: calc(100% - 20%);margin: 0 auto;padding-top: 10px;}
+.box .form .group .col-sm-2{width: 26%;line-height: 40px;display: inline-block;float: none;padding-left: 0;}
+.box .form .group .control{width: 72%;height: 30px;padding: 0 10px;}
+.box .form .form-group{width: 100%;text-align: center;margin-top: 20px;}
+.box .form .form-group button{width: 10%;height: 35px;}
+.box .form .checkbox input{margin-left: 3%;position: relative;top: 1px;}
+.box .form .group .col{width: 100%;display: block;}
+.form .group .form-control{width: 100%;height: 90px;padding: 5px 6px;}
+
+/*分页样式*/
+.paging button{margin: 5px;background: #237eff;color: #fff;padding: 5px 10px;border: none;cursor: pointer;}
+.paging span{color: #237eff;}
+.paging button:active{background: #6a9dff;}
+.paging .activity{color:#ffffff;background: #cccccc;}
+.paging .activity{color:#ffffff;background: #cccccc;}
+
+/*展示结果*/
+#callBack{padding: 10px;width: 100%;height: 360px;}
+#callBack span{font-size: 30px;color: red;}
+#callBack2{padding: 10px}
+#callBack2 span{font-size: 30px;color: red;}
+
+
+
+
+
