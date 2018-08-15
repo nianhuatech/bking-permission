@@ -1,199 +1,211 @@
-<%inherit file="/base.html"/>
-
-<%block name="content">
-    <div class="home-page">
-    	<div class="page-arrow">
-			<div class="container">
-				<!-- 蓝鲸智云开发框架说明  Start -->
-				<div class="tc title-word">
-					<p>欢迎使用蓝鲸智云集成平台</p>
-				</div>
-				<div class="tc title-word-second">
-					<p>蓝鲸智云开发框架<small class="pl10">助力你的自动化</small></p>
-				</div>
-				<hr class="cutting-line">
-				<div class="tc frame-explain-text">
-					<p>您现在打开的应用是由蓝鲸智云示例代码生成的，该示例代码称为“APP开发框架”。</p>
-					<p>蓝鲸智云集成平台（PaaS）提供了完善的前后台开发框架、调度引擎、公共组件等模块，帮助业务的产品和技术人员快速构建低成本、免运维的支撑工具和运营系统。</p>
-					<p>若想体验快速开发应用的功能，请前往<a class="developer-center" href="${BK_PAAS_HOST}" target="_blank">“开发者中心”</a>。</p>
-				</div>
-				<!-- 蓝鲸智云开发框架说明  End -->
-				<button id="doAdd" onclick="doClick()">测试新增111</button>
-				<button id="doModify" onclick="doClick2()">测试修改</button>
-				<button id="doDelDict" onclick="doClick3()">测试删除</button>
-				<button id="getPagingList" onclick="doClick4()">测试查询</button>
-				<button id="getPagingList2" onclick="doClick5()">测试查询2</button>
-				<button id="getPagingList3" onclick="doClick6()">测试查询3</button>
-			</div>
-		</div>
-    </div>
-</%block>
-<<script type="text/javascript">
-
-function doClick(){
-	$.post(site_url+"do_add_role/",{
-		'role_code':"role_code",
-		'role_name':"role_name",
-		'role_type':0,
-		'status':0,
-		'mark':"mark"
-		},function(res){
-			if (res.code) {	
-				alert(res.msg);
-			}else {
-				alert(res.msg);
-			}
-		}, 'json');	 
-	/* app_name=models.CharField(u"应用名称",max_length=255)
-    app_in_host=models.CharField(u"应用所属主机",max_length=255)
-    app_type=models.IntegerField(u"应用类型")
-    app_exe_file_path=models.CharField(u"应用执行文件路径",max_length=1000)
-    app_config_file_path=models.CharField(u"应用配置路径",max_length=1000)
-    app_src_path=models.CharField(u"应用源路径",max_length=1000)
-    app_bak_path=models.CharField(u"应用备份路径",max_length=1000)
-    app_check_cycle=models.IntegerField(u"检查周期(秒)")
-    app_status=models.IntegerField(u"应用状态")
-    app_create_time=models.DateField(u"创建时间")
-    app_creator=models.CharField(u"创建人",max_length=10)
-    app_mark=models.CharField(u"应用备注",max_length=1000,null=True,blank=True)
-    app_last_bak_time=models.DateField(u"最后备份时间") */
-	/*
-	$.post(site_url+"doAddAPPConfig/",{
-		'app_name':"app_name",
-		'app_host_ip':"app_host_ip",
-		'app_type':1,
-		'app_exe_file_path':"app_exe_file_path",  
-		'app_config_file_path':"app_config_file_path",
-		'app_biz_id':1234,
-		'host_os_type':"host_os_type",
-		'host_source':"host_source",
-		'app_biz_name':"app_biz_name",
-		'app_bak_path':"app_bak_path",  
-		'app_check_cycle':10000,
-		'app_mark':"app_mark"
-		},function(res){
-			if (res.code) {	
-				alert(res.text);
-			}else {
-				alert(res.text);
-			}
-		}, 'json');	
-		*/
-}
-
-function doClick2(){
-	/* $.post(site_url+"doModifyDict/",{
-		'id':1,
-		'dict_class':"dict_class2",
-		'dict_type':"dict_type2",
-		'dict_name':"dict_name2",
-		'dict_value':"dict_value2",  
-		'dict_status':1,
-		'dict_mark':"dict_mark2"
-		},function(res){
-			if (res.code) {	
-				alert(res.text);
-			}else {
-				alert(res.text);
-			}
-		}, 'json');	 */ 
-	$.post(site_url+"get_user_biz/",{
-		'id':2,
-		'app_name':"app_name2",
-		'app_in_host':"app_in_host2",
-		'app_type':1,
-		'app_exe_file_path':"app_exe_file_path2",  
-		'app_config_file_path':"app_config_file_path2",
-		'app_src_path':"app_src_path2",
-		'app_bak_path':"app_bak_path",  
-		'app_check_cycle':10000,
-		'app_mark':"app_mark"
-		},function(res){
-			if (res.code) {	
-				alert(res.text);
-			}else {
-				alert(res.text);
-			}
-		}, 'json');	
-}
-
-function doClick3(){
-	/* $.post(site_url+"doDelDict/",{
-		'id':3
-		},function(res){
-			if (res.code) {	
-				alert(res.text);
-			}else {
-				alert(res.text);
-			}
-		}, 'json');	 */ 
-	$.post(site_url+"doDelAPPConfig/",{
-		'id':3
-		},function(res){
-			if (res.code) {	
-				alert(res.text);
-			}else {
-				alert(res.text);
-			}
-		}, 'json');	
-}
-
-function doClick4(){
-	/* $.post(site_url+"getPagingDictList/",{
-		'pageSize':20,
-		'pageNumber':1
-		},function(res){
-			if (res.code) {	
-				//alert( res.toJSONString());
-				alert(JSON.stringify(res));
-				console.log(eval(JSON.stringify(res)));
-			}else {
-				alert(res.text);
-			}
-		}, 'json');	   */
-	 $.post(site_url+"getPagingAPPConfigList/",{
-		'pageSize':5,
-		'pageNumber':1
-		},function(res){
-			if (res.code) {	
-				alert(res.text);
-				alert(JSON.stringify(res));
-				console.log(JSON.stringify(res));
-			}else {
-				alert(res.text);
-			}
-		}, 'json'); 
-}
-
-function doClick5(){
-	$.post(site_url+"exec_task_test/",{
-		'id':1
-		},function(res){
-			if (res.code) {	
-				//alert( res.toJSONString());
-				alert(JSON.stringify(res));
-				console.log(JSON.stringify(res));
-			}else {
-				alert(res.text);
-			}
-		}, 'json');
-}
-
-function doClick6(){
-	$.post(site_url+"get_paging_application_type/",{
-		'app_name':"app_name",
-		'bis_name':"bis_name",
-		'pageSize':10,
-		'pageNumber':1
-		},function(res){
-			if (res.code) {	
-				//alert( res.toJSONString());
-				alert(JSON.stringify(res));
-				console.log(JSON.stringify(res));
-			}else {
-				alert(res.text);
-			}
-		}, 'json');
-}
+<%inherit file="/sys_base.html"/>
+<html>
+<head>
+<base href="">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="shortcut icon" href="${STATIC_URL}system/assets/img/bg/favicon.ico"/>
+<script src="${STATIC_URL}js/csrftoken.js"></script>
+<title>蓝鲸权限管理系统</title>
+<script type="text/javascript">
 
 </script>
+</head>
+
+<body>
+	<div id="wrapper" class="main_index">
+		<nav class="navbar-default navbar-static-side" role="navigation">
+			<div class="sidebar-collapse">
+				<ul class="nav metismenu" id="side-menu">
+					<li class="nav-header">
+						<div class="dropdown profile-element">
+							<span> <img alt="image" class="img-circle"
+								src="${STATIC_URL}system/assets/img/avatar2.jpg" />
+							</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+								<span class="clear"> <span class="block m-t-xs"> <strong
+										class="font-bold">用户</strong>
+								</span> <span class="text-muted text-xs block">我的<b
+										class="caret"></b></span>
+							</span>
+							</a>
+							
+							<ul class="dropdown-menu animated fadeInRight m-t-xs">
+								<li><a href="profile.html">个人信息编辑/查看</a></li>
+								<li><a href="contacts.html">密码修改</a></li>
+								<li class="divider"></li>
+								<li><a href="#">登出系统</a></li>
+							</ul>
+						</div>
+						<div class="logo-element">收缩....</div>
+					</li>
+					
+					<!-- 
+					<div class="pull-left center-left navbar-collapse collapse " role="navigation" id="nav_main_menu" class="">
+            		</div>
+					<div id = "menu_tree">
+					<li class="active"><a href="index.html"><i
+							class="fa fa-th-large"></i> <span class="nav-label">综合运营</span> <span
+							class="fa arrow"></span></a>
+						<ul class="nav nav-second-level">
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/dashboard")>综合门户</a></li>
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/advanced")>公告信息</a></li>
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/userinfo")>文件下载</a></li>
+						</ul>
+						</li>
+					<li><a href="#"><i class="fa fa-th-large"></i> <span
+							class="nav-label">监控管理</span><span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/dashboard")>告警监控</a></li>
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/advanced")>监控配置</a></li>
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/userinfo")>监控报表管理</a></li>
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/userinfo")>调度管理</a></li>
+							<li class="active"><a target="_blank" href="druid">Druit监控台</a></li>
+						</ul></li>
+					<li><a href="#"><i class="fa fa-th-large"></i> <span
+							class="nav-label">资源管理</span><span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/dashboard")>资源运营管理</a></li>
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/advanced")>资源配置</a></li>
+						</ul></li>
+					<li><a href="#"><i class="fa fa-th-large"></i> <span
+							class="nav-label">指标管理</span><span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/dashboard")>监控点管理</a></li>
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/advanced")>指示管理</a></li>
+						</ul></li>
+					<li><a href="#"><i class="fa fa-th-large"></i> <span
+							class="nav-label">运营分析</span><span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+							<li class="active"><a href=javascript:mainpageLoad("rest/page/dashboard")>机电性能分析</a></li>
+						</ul>
+					</li>
+					<li class="special_link"><a href="javascrpt:void(0)" onclick="openNewWindows()"><i
+							class="fa fa-database"></i> <span class="nav-label">机房环控</span></a></li>
+					</div>
+					
+					 -->
+					
+				</ul>
+
+			</div>
+		</nav>
+		<div id="page-wrapper" class="gray-bg dashbard-1" >
+			<div class="row border-bottom" style="height: 40px;">
+				<nav class="navbar navbar-static-top" role="navigation" style="height: 30px;margin-top: -12px;">
+					<div class="navbar-header" style="height: 30px;">
+						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary "
+							href="javascript:void(0)"><i class="fa fa-bars"></i> </a>
+						<form role="search" class="navbar-form-custom"
+							action="search_results.html">
+							<div class="form-group">
+								<input type="text" placeholder="键入回车进行搜索......"
+									class="form-control" name="top-search" id="top-search">
+							</div>
+						</form>
+					</div>
+					<ul class="nav navbar-top-links navbar-right" style="height: 30px;">
+
+						<li><span class="m-r-sm text-muted welcome-message">欢迎使用本系统</span>
+						</li>
+						<li class="dropdown"><a class="dropdown-toggle count-info"
+							data-toggle="dropdown" href="#"> <i class="fa fa-envelope"></i>
+								<span class="label label-warning">1</span>
+						</a>
+							<ul class="dropdown-menu dropdown-messages">
+								<li>
+									<div class="dropdown-messages-box">
+										<a href="profile.html" class="pull-left"> <img alt="图片"
+											class="img-circle" src="">
+										</a>
+										<div class="media-body">
+											<small class="pull-right">2017-10-23 16:10:21</small> <strong>新公告</strong><br>
+											<small class="text-muted">今天开始使用新框架迁移开发在线监控系统</small>
+										</div>
+									</div>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<div class="text-center link-block">
+										<a href="mailbox.html"> <i class="fa fa-envelope"></i> <strong>查看所有公告信息</strong>
+										</a>
+									</div>
+								</li>
+								<li class="divider"></li>
+							</ul></li>
+						<li class="dropdown"><a class="dropdown-toggle count-info"
+							data-toggle="dropdown" href="#"> <i class="fa fa-bell"></i> <span
+								class="label label-primary">1</span>
+						</a>
+							<ul class="dropdown-menu dropdown-alerts">
+								<li><a href="mailbox.html">
+										<div>
+											<i class="fa fa-envelope fa-fw"></i> 您有新的告警信息 <span
+												class="pull-right text-muted small">刚刚</span>
+										</div>
+								</a></li>
+								<li class="divider"></li>
+
+								<li>
+									<div class="text-center link-block">
+										<a href="notifications.html"> <strong>查看所有通知</strong> <i
+											class="fa fa-angle-right"></i>
+										</a>
+									</div>
+								</li>
+								<li class="divider"></li>
+							</ul></li>
+						<li><a class="right-sidebar-toggle" title="全屏展示" id="all_show"> <img
+								alt="全屏展示" class="all_show" id="all_show"
+								src="${STATIC_URL}system/assets/img/bg/quanping_ico_01.png"> 
+								<!-- <i class="all_show"></i> -->
+						</a>
+						</li>
+						<li>
+                             <a href="extra_lock.html">
+                                   <i class="fa fa-lock"></i> 锁屏
+                             </a>
+                         </li>
+						<li><a href="#"> <i class="fa fa-sign-out"></i>
+								退出登录
+						</a></li>
+						
+					</ul>
+					
+				</nav>
+			</div>
+			<div class="row border-bottom white-bg dashboard-header" style="height: 88%" id="mainpage" name="mainpage"></div>
+		</div>
+	</div>
+</body>
+<script src="${STATIC_URL}system/assets/olmt_js/olmt-menus-init.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function() {
+	var is_fullScreen = false;
+	$(".all_show").click(function() {
+		//debugger
+		if(!is_fullScreen){
+			//$("#mainpage").fullScreen();
+			$(".main_index").fullScreen();
+			$("#all_show").attr("title","退出全屏");
+			$(".all_show").attr("alt","退出全屏");
+			is_fullScreen = true;
+		}else if(is_fullScreen){
+			$(".main_index").fullScreen();
+			$("#all_show").attr("title","全屏展示");
+			$(".all_show").attr("alt","全屏展示");
+			is_fullScreen = false;
+		}
+	});
+});
+
+function mainpageLoad(url) {
+	if(url != undefined && url !=""){
+		$("#mainpage").load(url, function() {
+
+		});
+	}
+}
+</script>
+
+</html>

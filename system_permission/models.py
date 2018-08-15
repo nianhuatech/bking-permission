@@ -11,6 +11,7 @@ See the License for the specific language governing permissions and limitations 
 
 # from django.db import models
 from django.db import models
+from common_utils.model_to_dicts import convert_obj_to_dicts,convert_objs_to_dicts
 """
 权限管理models.操作员模型
 """
@@ -25,13 +26,13 @@ class BkingOperator(models.Model):
     login_code=models.CharField(u"登录工号",max_length=255)
     op_password=models.CharField(u"工号密码",max_length=255)
     bill_class=models.CharField(u"业务类别",max_length=255,null=True,blank=True)
-    photo=models.ImageField(u"头像",upload_to = "static/operator/photo/",max_length=255,null=True,blank=True)
+    photo=models.CharField(u"头像",max_length=255,null=True,blank=True)
     region_id=models.CharField(u"地市编码",max_length=255,null=True,blank=True)
     county_id=models.CharField(u"区县编码",max_length=255,null=True,blank=True)
     org_id=models.CharField(u"归属组织编码",max_length=255,null=True,blank=True)
-    email=models.EmailField(u"邮箱",max_length=255,null=True,blank=True)
+    email=models.CharField(u"邮箱",max_length=255,null=True,blank=True)
     phone_id=models.CharField(u"手机号",max_length=255,null=True,blank=True)
-    status=models.IntegerField(u"应用状态",choices=gender, default=0)
+    status=models.IntegerField(u"账号状态",choices=gender, default=0)
     create_date=models.DateTimeField(u"创建时间",auto_now_add=True)
     create_op=models.CharField(u"创建人",max_length=10)
     upd_date=models.DateTimeField(u"修改时间",auto_now = True)
@@ -99,7 +100,13 @@ class BkingPriv(models.Model):
     
     def __str__(self):
         return self.priv_code+'-'+self.priv_name
-
+    
+    def getChildrens(self):
+        try:
+            return BkingPriv.objects.filter(status=0,parent_priv_code=self.priv_code)
+        except:
+            pass
+    
     class Meta:
         ordering = ["-priv_code"]
         verbose_name = "权限资源"
@@ -114,8 +121,8 @@ class BkingRolePrivGrant(models.Model):
         ('0', "有效"),
         ('1', "无效"),
     )
-    role_code=models.BigIntegerField(u"业务ID")
-    priv_code=models.BigIntegerField(u"应用ID")
+    role_code=models.CharField(u"业务ID",max_length=255)
+    priv_code=models.CharField(u"应用ID",max_length=255)
     create_op=models.CharField(u"创建人",max_length=10)
     create_date=models.DateTimeField(u"创建时间",auto_now_add=True)
     start_date=models.DateTimeField(u"授权开始时间",null=True,blank=True)
@@ -137,20 +144,13 @@ class BkingOpRoleGrant(models.Model):
     gender = (
         ('0', "有效"),
         ('1', "无效"),
-    )
-    login_code=models.AutoField(u"主机账号ID",primary_key=True)
-    role_code=models.CharField(u"主机名",max_length=255)
+    ) 
+    login_code=models.CharField(u"登陆工号",max_length=255)
+    role_code=models.CharField(u"角色编码",max_length=255)
     create_op=models.CharField(u"创建人",max_length=10)
-    create_date=models.DateTimeField(u"创建时间",auto_now_add=True)
     start_date=models.DateTimeField(u"授权开始时间",null=True,blank=True)
     end_date=models.DateTimeField(u"授权结束时间",null=True,blank=True)
     status=models.IntegerField(u"授权状态",choices=gender, default=0)
+    create_date=models.DateTimeField(u"创建时间",auto_now_add=True)
+    mark=models.CharField(u"备注",max_length=1000,null=True,blank=True)
     
-    def __str__(self):
-        return self.login_code+'-'+self.role_code
-
-    class Meta:
-        ordering = ["-create_date"]
-        verbose_name = "账号角色授权"
-        verbose_name_plural = "账号角色授权"
-        

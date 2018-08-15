@@ -1,0 +1,96 @@
+<%inherit file="/sys_base.html"/>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+		</div>
+		<div style="border: 1px solid #ddd;">
+		<table id="menuTable"  data-mobile-responsive="true" data-click-to-select="true">
+			<thead>
+			<tr>
+				<th data-field="selectItem" data-checkbox="true"></th>
+			</tr>
+			</thead>
+		</table>
+		</div>
+	</div>
+
+	<div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading"></div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">菜单类别</div>
+				<div class="col-sm-10">
+				 <select class="selectpicker form-control priv_class" data-live-search="true" v-model="menu.priv_class" name="priv_class"  id="priv_class"></span>
+				 </select>
+				 </div>
+            </div>
+            <div class="form-group">
+				<div class="col-sm-2 control-label">菜单类型</div>
+				<label class="radio-inline">
+					<input type="radio" name="menu_type" value="1" v-model="menu.priv_type"/> 菜单
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="menu_type" value="2" v-model="menu.priv_type"/> 按钮
+				</label>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">菜单名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="menu.priv_name" placeholder="菜单名称或按钮名称"/>
+				</div>
+			</div>
+			<div v-if="menu.priv_type == 1 || menu.priv_type == 2" class="form-group">
+				<div class="col-sm-2 control-label">鉴权编码</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="menu.priv_code" placeholder="编码"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">上级菜单</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" style="cursor:pointer;" v-model="menu.parent_priv_code" @click="menuTree" readonly="readonly" placeholder="一级菜单"/>
+				</div>
+			</div>
+			<div v-if="menu.priv_type == 1" class="form-group">
+				<div class="col-sm-2 control-label">菜单URL</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="menu.priv_uri" placeholder="菜单URI"/>
+				</div>
+			</div>
+			<div v-if="menu.priv_type != 2" class="form-group">
+				<div class="col-sm-2 control-label">排序号</div>
+				<div class="col-sm-10">
+					<input type="number" class="form-control" v-model="menu.priv_sort" placeholder="排序号"/>
+				</div>
+			</div>
+			<div v-if="menu.priv_type != 2" class="form-group">
+				<div class="col-sm-2 control-label">图标</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="menu.priv_icon" placeholder="菜单图标"/>
+					<!-- <code style="margin-top:4px;display: block;"></code> -->
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">备注</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="menu.mark" placeholder="备注"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- 选择菜单 -->
+<div id="menuLayer" style="display: none;padding:10px;">
+	<ul id="menuTree" class="ztree"></ul>
+</div>
+<script src="${STATIC_URL}js/csrftoken.js"></script>
+<script src="${STATIC_URL}system/statics/js/modules/gen/sysmenu.js"></script>

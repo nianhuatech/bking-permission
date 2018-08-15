@@ -1,0 +1,72 @@
+.all_show{
+	height: 15px;
+}
+
+.full{
+   position: fixed;
+   align-content: center;
+   /*top: 10px;*/
+   /*left: 10px;*/
+   /*
+    原来基础的百分百
+   */
+   width: 100%;
+   height: 100%;
+   overflow: auto;
+}
+
+.class1{
+	background:url(../../olmtImg/class1.png) 50% 50% no-repeat;
+	width:24px; height:24px;
+	line-height:24px;
+	padding-left:8px;
+	color:#fff;
+	font-size:0px;
+}
+.class2{
+	background:url(../images/class4_2.png) 50% 50% no-repeat; 
+	width:24px; height:24px;
+	line-height:24px;
+	padding-left:8px;
+	color:#fff;
+	font-size:0px;
+}
+.class3{
+	background:url(../images/class3.png) 50% 50% no-repeat;
+	width:24px; height:24px;
+	line-height:24px;
+	padding-left:8px;
+	color:#fff;
+	font-size:0px;
+}
+.class4{
+	background:url(../images/class4_2.png) 50% 50% no-repeat;/* 改图 */
+	width:24px; height:24px;
+	line-height:24px;
+	padding-left:8px;
+	color:#fff;
+	font-size:0px;
+}
+.class5{
+	background:url(../images/class5_2.png) 50% 50% no-repeat;/* 改图 */
+	width:24px; height:24px;
+	line-height:24px;
+	padding-left:8px;
+	color:#fff;
+	font-size:0px;
+}
+.class6{
+	background:url(../images/class6.png) 50% 50% no-repeat;
+	width:24px; height:24px;
+	line-height:24px;
+	padding-left:8px;
+	color:#fff;
+	font-size:0px;
+}
+
+/**
+jqgrid 表头居中
+*/
+.ui-jqgrid-sortable{
+	text-align: center;
+}

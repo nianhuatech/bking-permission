@@ -1,0 +1,15 @@
+{
+    "wordLength": "您的密码太短",
+	"wordNotEmail": "不要使用电子邮件作为密码",
+	"wordSimilarToUsername": "您的密码不能包含您的用户名",
+	"wordTwoCharacterClasses": "使用不同的字元类型 例如: 大小写混合",
+	"wordRepetitions": "太多的重复。例如:1111",
+	"wordSequences": "你的密码包含连续英/数字 例如:123 or abc",
+	"errorList": "错误：",
+	"veryWeak": "非常弱",
+	"weak": "弱",
+	"normal": "普通",
+	"medium": "中等",
+	"strong": "强",
+	"veryStrong": "非常强"
+}
