@@ -14,7 +14,6 @@
 		<script src="../../static/js/jquery-1.10.2.min.js"></script>
 		<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script src="../../static/js/bootstrap-paginator.js"></script>
-		<script src="../../static/js/paging.js"></script>
 		<script src="../../static/js/index.js"></script>
 		<script src="../../static/js/menu_min.js"></script>
 		<script src="${STATIC_URL}js/csrftoken.js"></script>
@@ -35,83 +34,59 @@
 				</div>
 				<ul>
 					<li class="nav1">
-						<a class="active" href="javascript:;">系统管理</a>
-						<ul style="display: block;">
-							<li class="li">
+						<a class="active" href="javascript:;">数据数据管理</a>
+						<ul id="test" class="test" style="display: block;">
+							<li data="${SITE_URL}business_model/" class="li">
 								<a href="javascript:;">
 									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;"><!--资源管理-->业务模型</span>
+									<span style="padding-left: 5px;">业务模型</span>
 								</a>
 							</li>
-							<li class="li">
+							<li data="${SITE_URL}application_model/" class="li">
 								<a href="javascript:;">
 									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;"><!--角色管理-->应用模型</span>
+									<span style="padding-left: 5px;">应用模型</span>
 								</a>
 							</li>
-							<li class="li">
+							<li data="${SITE_URL}app_relationship_model/" class="li">
 								<a href="javascript:;">
 									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;"><!--用户管理-->业务应用关系模型</span>
+									<span style="padding-left: 5px;">业务应用关系模型</span>
 								</a>
 							</li>
-							<li class="li">
+							<li data="${SITE_URL}host_relational_model/" class="li">
 								<a href="javascript:;">
 									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;"><!--页面管理-->应用主机关系模型</span>
-								</a>
-							</li>
-							<li class="li">
-								<a href="javascript:;">
-									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;">数据管理</span>
-								</a>
-							</li>
-							<li class="li">
-								<a href="javascript:;">
-									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;">日志管理</span>
-								</a>
-							</li>
-							<li class="li">
-								<a href="javascript:;">
-									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;">个人资料</span>
-								</a>
-							</li>
-							<li class="li">
-								<a href="javascript:;">
-									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;">修改密码</span>
+									<span style="padding-left: 5px;">应用主机关系模型</span>
 								</a>
 							</li>
 						</ul>
 					</li>
 					<li class="nav1 nav2">
-						<a href="javascript:;">监控管理</a>
-						<ul>
-							<li class="li">
+						<a href="javascript:;">系统管理</a>
+						<ul id="test" class="test">
+							<li data="${SITE_URL}user_view/" class="li">
 								<a href="javascript:;">
 									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;">注册中心监控</span>
+									<span style="padding-left: 5px;">账号管理</span>
 								</a>
 							</li>
-							<li class="li">
+							<li data="${SITE_URL}role_view/"  class="li">
 								<a href="javascript:;">
 									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;">服务治理</span>
+									<span style="padding-left: 5px;">角色管理</span>
 								</a>
 							</li>
-							<li class="li">
+							<li  data="${SITE_URL}menu_view/" class="li">
 								<a href="javascript:;">
 									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;">服务监控</span>
+									<span style="padding-left: 5px;">资源管理</span>
 								</a>
 							</li>
-							<li class="li">
+							<li  data="${SITE_URL}host_app_mgr_view/" class="li">
 								<a href="javascript:;">
 									<span class="glyphicon glyphicon-lock"></span>
-									<span style="padding-left: 5px;">服务链路跟踪</span>
+									<span style="padding-left: 5px;">资源管理</span>
 								</a>
 							</li>
 						</ul>
@@ -151,178 +126,19 @@
 				<div class="clearfloat"></div>
 			</div>
 		</div>
-		<!-- 系统管理 -->
-		<div class="contents">
-			<div class="content" style="display: block">
-				<form class="collect">
-					<div class="collecting">
-						<label>创建时间</label>
-						<input type="text" placeholder="创建时间" />
-					</div>
-					<div class="collecting">
-						<label style="padding-left: 40px;">业务名称</label>
-						<input type="text" placeholder="名称" />
-					</div>
-					<button type="button" class="glyphicon glyphicon-zoom-in"></button>
-					<div class="clearfloat"></div>
-				</form>
-				<div class="division"></div>
-				<form class="click">
-					<input type="button" class="button" value="新 建">
-					<input type="button" class="button" value="编 辑">
-				</form>
-				<div class="box">
-					<div class="mask"></div>
-					<form class="form" id="listForm">
-						<div class="group section">
-							<label for="lastname" class="col-sm-2">业务名称：</label>
-							<input type="text" class="control" id="bis_name" name="bis_name" placeholder="请输入业务名称">
-							<input type="text" class="control" id="bis_id" name="bis_id" hidden="hidden">
-						</div>
-						<div style="display: none" id="status_div" class="group checkbox">
-							<label for="firstname" class="col-sm-2">
-							<b>业务状态：</b>
-						</label>
-							<input type="radio" name="status" value="1">有效
-							<input type="radio" name="status" value="2">无效
-						</div>
-						<div class="group">
-							<div class="col">
-								<label for="name" class="col-sm-2">备注：</label>
-							</div>
-							<textarea id="mark" class="form-control" name="mark" rows="2"></textarea>
-						</div>
-						<div class="form-group">
-							<input type="button" onclick="doClick();" class="btn btn-default" value="提 交"/>
-						</div>
-					</form>
-				</div>
-				<script>
-					$(".mask").click(function() {
-						$(".form").hide();
-						$(".mask").hide();
-					});
-
-					$(".button").click(function() {
-						/* $(".form").show();
-						$(".mask").show(); */
-					});
-				</script>
-				<!-- <ul class="tr">
-					<li>ID</li>
-					<li>创建人</li>
-					<li>业务名称</li>
-					<li>业务状态</li>
-					<li>备注</li>
-					<li>操作</li>
-				</ul>
-				<div style="margin-top: 100px;">
-					<ul id="page"></ul>
-				</div> -->
-				 <!-- HTML代码、服务端内容填充 -->
-				<div class="queryBox" style="margin: 10px 10px 10px 10px;">
-				<!-- 定义表格框架 -->
-					<table id="dataGridTableJson" class="table table-striped table-bordered table-hover table-condensed">
-						<thead>
-							<tr>
-								<!-- <th class="selectColumn"></th> -->
-								<th>ID</th>
-								<th>业务名称</th>
-								<th>业务状态</th>
-								<th>创建人</th>
-								<th>创建时间</th>
-								<th>备注</th>
-								<th>操作</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-				<div id="page3"></div>
-			</div>
+		<div id="iframe">
+			<iframe class="iframe" src="${SITE_URL}business_model/" frameborder="0"></iframe>
 		</div>
-		<!-- 监控管理 -->
-		<style>
-			
-		</style>
-		<!-- js -->
 		<script>
-			function doClick(i){
-			//var param = {"bis_name":$("#firstname").val(),"mark":$("#mark").val()};
-			//alert(param);
-				/* if(i == 0){
-					$.ajax({
-						type: 'POST',
-					  	url: site_url+"do_add_business/",
-					  	data: {
-					  		bis_name:$("#bis_name").val(),
-					  		mark:$("#mark").val()
-					  	},
-					  	success: function(returnData){
-							alert(returnData.msg);
-						},
-					  	dataType: 'json'
-					});
-				}else{ */
-					$.ajax({
-						type: 'POST',
-					  	url: site_url+"do_modify_business/",
-					  	data: {
-					  		status:$('#status_div input:radio:checked').val(),
-					  		bis_id:$("#bis_id").val(),
-					  		bis_name:$("#bis_name").val(),
-					  		mark:$("#mark").val()
-					  	},
-					  	success: function(returnData){
-							alert(returnData.msg);
-						},
-					  	dataType: 'json'
-					});
-				//}
-				
-			}
-			
-			$(function() {
-				// 这里写了一个构造函数
-				// click_child 点击的对象
-				// show_boxes 展示信息的父级盒子
-				// show_box 展示的内容
-				// activeName 导航高亮效果
-				function changeBox(click_child, show_boxes, show_box, activeName) {
-					$(click_child).removeClass(activeName);
-					$(show_box).hide();
-					$(this).addClass(activeName);
-					$(show_boxes).find(show_box).eq($(this).index()).show();
-				}
-				$('.nav1').find('.li').click(function() {
-					return changeBox.call(this, '.li', '.contents', '.content', 'active_li')
-				})
-				// eg： 这是`系统管理`
-				$('.nav2').find('.li').click(function() {
-					return changeBox.call(this, '.li', '.monitor_controller', '.content', 'active_li')
+			$(function(){
+				$('.test').find('li').click(function(){
+					// 获取地址参数
+					var $herf = '';
+					$herf = $(this).attr('data');
+					$('#iframe').find('iframe').attr('src', $(this).attr('data'));
+		
 				})
 			})
-			
-			$(function () {
-	           var currentPage = 1;
-	           var totalPages = 25;
-	           $("#page").bootstrapPaginator({
-	               bootstrapMajorVersion:3, //对应的bootstrap版本
-	               currentPage: currentPage, //当前页数
-	               numberOfPages: 10, //每次显示页数
-	               totalPages:totalPages, //总页数
-	               shouldShowPage:true,//是否显示该按钮
-	               useBootstrapTooltip:true,
-	               //点击事件
-	               onPageClicked: function (event, originalEvent, type, page) {
-	                   
-	
-	               }
-           });
-
-        });
-
 		</script>
 	</body>
 
