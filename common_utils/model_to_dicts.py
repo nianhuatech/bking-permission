@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os,base64,copy,datetime,re,json
 from django.core import serializers
+import hashlib
 def json_field(field_data):
     """
     将字典的键值转化为对象
@@ -28,10 +29,10 @@ def json_encode_dict(dict_data):
     :param dict_data:
     :return:
     """
-    json_data = "{"
+    json_data = '{'
     for (k, v) in dict_data.items():
         json_data = json_data + json_field(k) + ':' + json_field(v) + ', '
-    json_data = json_data[:-2] + "}"
+    json_data = json_data[:-2] + '}'
     return json_data
 
 
@@ -42,10 +43,10 @@ def json_encode_list(list_data):
     :param list_data:
     :return:
     """
-    json_res = "["
+    json_res = '['
     for item in list_data:
         json_res = json_res + json_encode_dict(item) + ", "
-    return json_res[:-2] + "]"
+    return json_res[:-2] + ']'
 
 
 def objects_to_json(objects, model):
@@ -70,14 +71,35 @@ def objects_to_json(objects, model):
     for obj in objects:
         dict_data = {}
         print obj._meta.get_all_field_names()
+        if obj.getChildrens().exists():
+            dict_data["Childrens"] = getChildrens(obj.getChildrens(),model)
         for field in obj._meta.get_all_field_names():
-            if field.name == 'id':
-                continue
-            value = field.value_from_object(obj)
-            dict_data[field.name] = value
+            value = getattr(obj, field)
+            dict_data[field] = value
         list_data.append(dict_data)
 
     data = json_encode_list(list_data)
+    return data
+
+def getChildrens(objs,model):
+    from collections import Iterable
+    list_data = []
+    for objects in objs:
+        concrete_model = model._meta.concrete_model
+        # 处理不可迭代的 get 方法
+        if not isinstance(object, Iterable):
+            objects = [objects, ]
+    
+        for obj in objects:
+            dict_data = {}
+            print obj._meta.get_all_field_names()
+            if obj.getChildrens().exists():
+                dict_data["Childrens"] = getChildrens(obj.getChildrens())
+            for field in obj._meta.get_all_field_names():
+                value = getattr(obj, field)
+                dict_data[field] = value
+            list_data.append(dict_data)
+            data = json_encode_list(list_data)    
     return data
 
 
@@ -112,7 +134,6 @@ def json_to_objects(json_str, model):
 #对象列表转换成字典
 def convert_objs_to_dicts(model_obj):
     import inspect, types
-    
     object_array = []
      
     for obj in model_obj:
@@ -128,6 +149,8 @@ def convert_objs_to_dicts(model_obj):
                 if type(fieldValue) is datetime.date or type(fieldValue) is datetime.datetime:
     #                     fieldValue = fieldValue.isoformat()
                     fieldValue = datetime.datetime.strftime(fieldValue, '%Y-%m-%d %H:%M:%S')
+                #elif type(fieldValue) is  ImageFieldFile:
+                 #   fieldValue = fieldValue[img]
                 # 没想好外键与cache字段的解决办法
 #                 if hasattr(fieldValue, "__dict__"):
 #                     fieldValue = convert_obj_to_dicts(model_obj)
@@ -185,4 +208,9 @@ def getKwargs(data={}):
    for (k , v)  in data.items() :
        if v is not None and v != u'' :
            kwargs[k] = v          
-   return kwargs
+   return kwargs
+def hash_code(s, salt):# 加点盐
+    h = hashlib.sha256()
+    s += salt
+    h.update(s.encode())  # update方法只接收bytes类型
+    return h.hexdigest()

@@ -31,7 +31,12 @@ def home(request):
     """
     首页
     """
-    return render_mako_context(request, '/system_permission/home.html')
+    if not request.session.get('user_is_login'):
+        request.session['user_is_login'] = False
+        request.session['user_id'] = ""
+        request.session['user_name'] = ""
+        request.session['login_code'] = ""
+    return render_mako_context(request, '/system_permission/home3_bak.html')
 
 def login(rq):
     """
@@ -57,13 +62,24 @@ def menu_view(request):
     """
     return render_mako_context(request, '/system_permission/sysmenu.html')
 
+def host_app_mgr_view(request):
+    """
+    菜单
+    """
+    return render_mako_context(request, '/system_permission/hostappmgr.html')
 
 
-def contactus(request):
+def dict_view(request):
     """
-    联系我们
+    字典管理
     """
-    return render_mako_context(request, '/home_application/contact.html')
+    return render_mako_context(request, '/system_permission/dictmgr.html')
+
+def chgPwd_view(req):
+    return render_mako_context(req, '/system_permission/changePwd.html')
+
+def home_view(req):
+    return render_mako_context(req, '/system_permission/home_page.html')
 
 """
 ================视图操作end========================
@@ -74,17 +90,16 @@ def contactus(request):
 """
 #同步账号
 def do_async_operator(req):
-    user_name = req.user.username
+    user_name = req.session.get('login_code')
     if user_name == None or user_name == "":
         return render_json({'code':False, 'msg':u"获取用户信息失败"})
-    bk_token = req.COOKIES["bk_token"]
+    #bk_token = req.COOKIES["bk_token"]
     param = {
         "bk_app_code": "permission",
         "bk_app_secret": "4540c16b-890e-4109-a3f0-ab196f0ab7c4",
-        "bk_token": bk_token,
-        "bk_username":user_name
+        "bk_username":"permission"
         }
-    client = get_client_by_request(req)
+    client = get_client_by_user(req)
     users = client.bk_login.get_all_users(param)
     is_upd = False
     if users["result"] == True:
@@ -109,62 +124,166 @@ def do_async_operator(req):
         return render_json({'code':False, 'msg':u"平台同步接口返回数据列表为空。"})
     
 
-def do_modify_business(req):
-    bis_id = req.POST.get("bis_id")
-    if bis_id == None or bis_id == "":
-        return render_json({'code':False, 'msg':u"必须传递参数bis_id且值不为空"})
-    try:
-        business = BkingBusiness.objects.get(bis_id=bis_id)
-    except Exception, e:
-        logger.error('modify object for BkingBusiness is error:{}'.format(repr(e))) 
-        return render_json({'code':False, 'msg':u"数据保存失败:{}".format(repr(e))})
-    bis_name = req.POST.get("bis_name")
-    mark = req.POST.get("mark")
+def do_add_user(req):
+    user_name = req.user.username
+    if user_name == None or user_name == "":
+        return render_json({'code':False, 'msg':u"获取用户信息失败"})
+    login_code = req.POST.get("login_code")
+    op_name = req.POST.get("op_name")
+    op_password = req.POST.get("op_password")
+    bill_class = req.POST.get("bill_class")
+    region_id = req.POST.get("region_id")
+    county_id = req.POST.get("county_id")
+    org_id = req.POST.get("org_id")
+    email = req.POST.get("email")
+    phone_id = req.POST.get("phone_id")
     status = req.POST.get("status")
-    if bis_name == None or bis_name == "":
+    mark = req.POST.get("mark")
+    try:
+        users = BkingOperator.objects.filter(login_code=login_code)
+        if users.exists():
+            return render_json({'code':False, 'msg':u"登录名已存在"})
+        BkingOperator.objects.create(login_code=login_code,op_name=op_name,op_password=hash_code(op_password,login_code)
+                                    ,bill_class=bill_class,region_id=region_id,county_id=county_id
+                                    ,org_id=org_id,email=email,phone_id=phone_id
+                                    ,status=status,mark=mark,create_op=user_name)
+        logger.error('insert object to BkingOperator is success')
+        return render_json({'code':False, 'msg':u"账号数据新增成功"})
+    except Exception , e:
+        logger.error('insert object to BkingOperator is error:{}'.format(repr(e)))
+        return render_json({'code':False, 'msg':u"账号数据新增失败:{}".format(repr(e))})
+    
+def get_user(req):
+    op_id = req.POST.get("id")
+    if op_id == None or op_id == "":
+        return render_json({'code':False, 'msg':u"必须传递参数id且值不为空"})
+    try: 
+        user = BkingOperator.objects.get(op_id=op_id)
+        return render_json({'code':True, 'msg':u"查询数据成功",'list':convert_obj_to_dicts(user)})
+    except Exception, e:
+        logger.error('get object for BkingOperator is error:{}'.format(repr(e))) 
+        return render_json({'code':False, 'msg':u"数据查询失败:{}".format(repr(e))})
+
+def do_modify_user(req):
+    op_id = req.POST.get("op_id")
+    if op_id == None or op_id == "":
+        return render_json({'code':False, 'msg':u"必须传递参数id且值不为空"})
+    op_name = req.POST.get("op_name")
+    bill_class = req.POST.get("bill_class")
+    region_id = req.POST.get("region_id")
+    county_id = req.POST.get("county_id")
+    org_id = req.POST.get("org_id")
+    email = req.POST.get("email")
+    phone_id = req.POST.get("phone_id")
+    status = req.POST.get("status")
+    mark = req.POST.get("mark")
+    try:
+        user = BkingOperator.objects.get(op_id=op_id)
+    except Exception, e:
+        logger.error('modify object for BkingOperator is error:{}'.format(repr(e))) 
+        return render_json({'code':False, 'msg':u"账号不存在:{}".format(repr(e))})
+    if op_name == None or op_name == "":
         return render_json({'code':False, 'msg':u"业务名称不能为空"})
+    user.op_name = op_name
+    user.bill_class = bill_class
+    user.region_id = region_id
+    user.county_id = county_id
+    user.org_id = org_id
+    user.email = email
+    user.phone_id = phone_id
+    user.status = status
+    user.mark = mark
+    
     try:
-        bis = BkingBusiness.objects.get(bis_name=bis_name)
-        if bis and bis.bis_id != bis_id:
-            return render_json({'code':False, 'msg':u"业务名称【"+bis_name+u"】已被占用"})
-    except:
-        pass
-    business.bis_name = bis_name
-    business.mark = mark
-    business.status = status
-    try:
-        business.save()
-        logger.info('modify object for BkingBusiness is success:{}') 
+        user.save()
+        logger.info('modify object for BkingOperator is success:{}') 
         return render_json({'code':True, 'msg':u"数据保存成功"})
     except Exception, e:
-        logger.error('modify object for BkingBusiness is error:{}'.format(repr(e))) 
+        logger.error('modify object for BkingOperator is error:{}'.format(repr(e))) 
         return render_json({'code':False, 'msg':u"数据保存失败:{}".format(repr(e))})
     
     
-def do_del_business(req):
-    bis_id = req.POST.get("bis_id")
-    if bis_id == None or bis_id == "":
-        return render_json({'code':False, 'msg':u"必须传递参数bis_id且值不为空"})
-    bis_app_rels = BkingBisApplicationRel.objects.filter(bis_id=bis_id)
-    if bis_app_rels.exists():
-        return render_json({'code':False, 'msg':u"该业务下已和应用关联，不能删除，要删除请先解除关联关系"})
+def do_del_user(req):
+    op_ids = req.POST.getlist("userIds")
+    if op_ids == None or op_ids == "":
+        return render_json({'code':False, 'msg':u"必须传递参数op_id且值不为空"})
     try:
-        BkingBusiness.objects.filter(bis_id=bis_id).delete()
-        return render_json({'code':True, 'msg':u"数据删除成功"})
+        for op_id in op_ids:
+            user = BkingOperator.objects.get(op_id=op_id)
+            #删除账号
+            BkingOperator.objects.filter(op_id=op_id).delete()
+            #删除账号关联的角色信息
+            BkingOpRoleGrant.objects.filter(login_code=user.login_code).delete()
+            return render_json({'code':True, 'msg':u"数据删除成功"})
     except Exception, e:
-        logger.error('delete object for BkingBusiness is error:{}'.format(repr(e))) 
+        logger.error('delete object for BkingOperator is error:{}'.format(repr(e))) 
         return render_json({'code':False, 'msg':u"数据删除失败:{}".format(repr(e))})
     
-def get_business(req):
-    bis_id = req.POST.get("bis_id")
-    if bis_id == None or bis_id == "":
-        return render_json({'code':False, 'msg':u"必须传递参数bis_id且值不为空"})
+def do_lock_user(req):
+    op_ids = req.POST.getlist("userIds")
+    if op_ids == None or op_ids == "":
+        return render_json({'code':False, 'msg':u"必须传递参数op_id且值不为空"})
+    try:
+        for op_id in op_ids:
+            user = BkingOperator.objects.get(op_id=op_id)
+            user.status = 1
+            user.save()
+    except Exception,e:
+        logger.error('modify object  BkingOperator is error:{}'.format(repr(e))) 
+        return render_json({'code':False, 'msg':u"解锁失败".format(repr(e))})
+    return render_json({'code':True, 'msg':u"解锁成功"})
+
+
+def do_unlock_user(req):
+    op_ids = req.POST.getlist("userIds")
+    if op_ids == None or op_ids == "":
+        return render_json({'code':False, 'msg':u"必须传递参数op_id且值不为空"})
+    try:
+        for op_id in op_ids:
+            user = BkingOperator.objects.get(op_id=op_id)
+            user.status = 0
+            user.save()
+    except Exception,e:
+        logger.error('modify object  BkingOperator is error:{}'.format(repr(e))) 
+        return render_json({'code':False, 'msg':u"解锁失败".format(repr(e))})
+    return render_json({'code':True, 'msg':u"解锁成功"})
+
+
+def updPwd(req):
+    op_id = req.POST.get("op_id")
+    if op_id == None or op_id == "":
+        return render_json({'code':False, 'msg':u"必须传递参数op_id且值不为空"})
+    pwd = req.POST.get("op_password")
+    newpwd = req.POST.get("newPassword")
+    if pwd != newpwd:
+        return render_json({'code':False, 'msg':u"两次输入密码不一致"})
     try: 
-        business = BkingBusiness.objects.get(bis_id=bis_id)
-        return render_json({'code':True, 'msg':u"查询数据成功",'list':convert_obj_to_dicts(business)})
+        user = BkingOperator.objects.get(op_id=op_id)
+        pwd = hash_code(pwd,user.login_code)
+        user.op_password = pwd
+        user.save()
+        return render_json({'code':True, 'msg':u"密码修改成功"})
     except Exception, e:
-        logger.error('get object for BkingBusiness is error:{}'.format(repr(e))) 
-        return render_json({'code':False, 'msg':u"数据查询失败:{}".format(repr(e))})
+        logger.error('modify object pwd BkingOperator is error:{}'.format(repr(e))) 
+        return render_json({'code':False, 'msg':u"密码修改失败".format(repr(e))})
+    
+def chgPwd(req):
+    op_id = req.POST.get("op_id")
+    if op_id == None or op_id == "":
+        return render_json({'code':False, 'msg':u"必须传递参数op_id且值不为空"})
+    pwd = req.POST.get("op_password")
+    newpwd = req.POST.get("newPassword")
+    if pwd != newpwd:
+        return render_json({'code':False, 'msg':u"两次输入密码不一致"})
+    try: 
+        user = BkingOperator.objects.get(op_id=op_id)
+        pwd = hash_code(pwd,user.login_code)
+        user.op_password = pwd
+        user.save()
+        return render_json({'code':True, 'msg':u"密码修改成功"})
+    except Exception, e:
+        logger.error('modify object pwd BkingOperator is error:{}'.format(repr(e))) 
+        return render_json({'code':False, 'msg':u"密码修改失败".format(repr(e))})
 
 
 def get_user_paging(req):
@@ -701,41 +820,41 @@ def get_role_priv(req):
         return render_json({'code':False, 'msg':u"查询角色信息失败，请检查数据完整性"})
     
 def get_priv_by_role_code(role_code):
-    sql = u"select 0 as 'id',0 as 'priv_code',-1 as 'parent_priv_code','根资源' as 'name'  FROM dual\
+    sql = u"select 0 as 'id',0 as 'priv_code',-1 as 'parent_priv_code','根资源' as 'name','' as 'uri','' as 'type'  FROM dual\
             UNION all\
-            select t1.id,t1.priv_code,t1.parent_priv_code,t1.priv_name from system_permission_bkingpriv t1,system_permission_bkingroleprivgrant t3\
+            select t1.id,t1.priv_code,t1.parent_priv_code,t1.priv_name,t1.priv_uri,t1.priv_type from system_permission_bkingpriv t1,system_permission_bkingroleprivgrant t3\
             where t3.priv_code = t1.priv_code and t1.`status`=0 and t3.`status`=0 "
     
     sqlbis = u" UNION ALL \
-                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM (SELECT '0' as id,CONCAT('bkingbusiness') as priv_code,'0' as parent_priv_code,'业务数据' as name  FROM dual \
+                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM (SELECT '0' as id,CONCAT('bkingbusiness') as priv_code,'0' as parent_priv_code,'业务数据' as name,'' as 'uri','3' as 'type'  FROM dual \
                 UNION ALL \
-                SELECT DISTINCT t1.bis_id as id,CONCAT('bkingbusiness-',t1.bis_id) as priv_code,CONCAT('bkingbusiness') as parent_priv_code,t1.bis_name as name  from home_application_bkingbusiness t1) tt , \
+                SELECT DISTINCT t1.bis_id as id,CONCAT('bkingbusiness-',t1.bis_id) as priv_code,CONCAT('bkingbusiness') as parent_priv_code,t1.bis_name as name,'' as 'uri','3' as 'type'  from home_application_bkingbusiness t1) tt , \
                 system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code and t3.`status`=0 "
         
     sqlapp = u" UNION ALL \
-                    SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM (SELECT '0' as id,CONCAT('bkingapplication') as priv_code,'0' as parent_priv_code,'应用数据' as name  FROM dual\
+                    SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM (SELECT '0' as id,CONCAT('bkingapplication') as priv_code,'0' as parent_priv_code,'应用数据' as name,'' as 'uri','3' as 'type'  FROM dual\
                     UNION ALL \
-                    SELECT DISTINCT t1.app_id as id,CONCAT('bkingapplication-',t1.app_id) as priv_code,CONCAT('bkingapplication') as parent_priv_code,t1.app_name as name  from home_application_bkingapplication t1) tt , \
+                    SELECT DISTINCT t1.app_id as id,CONCAT('bkingapplication-',t1.app_id) as priv_code,CONCAT('bkingapplication') as parent_priv_code,t1.app_name as name,'' as 'uri','3' as 'type'  from home_application_bkingapplication t1) tt , \
                     system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code  and t3.`status`=0 "
         
     sqlbisapp = u" UNION ALL \
-                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM (SELECT '0' as id,CONCAT('bkingbisapplicationrel') as priv_code,'0' as parent_priv_code,'业务应用关系数据' as name  FROM dual \
+                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM (SELECT '0' as id,CONCAT('bkingbisapplicationrel') as priv_code,'0' as parent_priv_code,'业务应用关系数据' as name,'' as 'uri','3' as 'type'  FROM dual \
                 UNION ALL \
                 SELECT DISTINCT t1.id as id,CONCAT('bkingbisapplicationrel-',t1.id) as priv_code,CONCAT('bkingbisapplicationrel') as parent_priv_code, \
                 CONCAT('业务|',(SELECT t2.bis_name from home_application_bkingbusiness t2 where t2.bis_id=t1.bis_id),'-','应用|', \
-                (SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id)) as name \
+                (SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id)) as name,'' as 'uri','3' as 'type' \
                 from home_application_bkingbisapplicationrel t1) tt , \
                 system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code and t3.`status`=0 "
         
     sqlapphost = u" UNION ALL \
-                        SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM (SELECT '0' as id,CONCAT('bkingapplicationhostrel') as priv_code,'0' as parent_priv_code,'应用主机关系数据' as name  FROM dual \
+                        SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM (SELECT '0' as id,CONCAT('bkingapplicationhostrel') as priv_code,'0' as parent_priv_code,'应用主机关系数据' as name,'' as 'uri','3' as 'type'  FROM dual \
                         UNION ALL \
                         SELECT DISTINCT t1.id as id,CONCAT('bkingapplicationhostrel-',t1.id) as priv_code,CONCAT('bkingapplicationhostrel') as parent_priv_code, \
                         CONCAT('应用|',(SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id),'-','主机|', \
-                        (SELECT t2.host_ip from home_application_bkinghostaccount t2 where t2.host_account_id=t1.host_account_id)) as name \
+                        (SELECT t2.host_ip from home_application_bkinghostaccount t2 where t2.host_account_id=t1.host_account_id)) as name,'' as 'uri','3' as 'type' \
                         from home_application_bkingapplicationhostrel t1) tt , \
                         system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code and t3.`status`=0 "
@@ -756,7 +875,7 @@ def get_priv_by_role_code(role_code):
 
 
 def get_curr_user_priv(req):
-    user_name = req.user.username
+    user_name = req.session.get('login_code')
     if user_name == None or user_name == "":
         return render_json({'code':False, 'msg':u"获取用户信息失败"})
     return get_priv_by_user_code(user_name)
@@ -765,34 +884,34 @@ def get_curr_user_priv(req):
 def get_priv_by_user_code(login_code):
     flag = user_is_super(login_code)
     if int(flag) == int(0):#超级管理员
-        sql = u"select 0 as 'id',0 as 'priv_code',-1 as 'parent_priv_code','根资源' as 'name' FROM dual\
+        sql = u"select 0 as 'id',0 as 'priv_code',-1 as 'parent_priv_code','根资源' as 'name','' as 'uri','' as 'type' FROM dual\
                 UNION all\
-                select t1.id,t1.priv_code,t1.parent_priv_code,t1.priv_name from system_permission_bkingpriv t1 where t1.`status`=0 "
+                select t1.id,t1.priv_code,t1.parent_priv_code,t1.priv_name,t1.priv_uri,t1.priv_type from system_permission_bkingpriv t1 where t1.`status`=0 "
         
         sqlbis = u" UNION ALL \
-                SELECT '0' as id,CONCAT('bkingbusiness') as priv_code,'0' as parent_priv_code,'业务数据' as name  FROM dual \
+                SELECT '0' as id,CONCAT('bkingbusiness') as priv_code,'0' as parent_priv_code,'业务数据' as name,'' as 'uri','3' as 'type'  FROM dual \
                 UNION ALL \
-                SELECT t1.bis_id as id,CONCAT('bkingbusiness-',t1.bis_id) as priv_code,CONCAT('bkingbusiness') as parent_priv_code,t1.bis_name as name  from home_application_bkingbusiness t1 "
+                SELECT t1.bis_id as id,CONCAT('bkingbusiness-',t1.bis_id) as priv_code,CONCAT('bkingbusiness') as parent_priv_code,t1.bis_name as name,'' as 'uri','3' as 'type'  from home_application_bkingbusiness t1 "
         
         sqlapp = u" UNION ALL \
-                    SELECT '0' as id,CONCAT('bkingapplication') as priv_code,'0' as parent_priv_code,'应用数据' as name  FROM dual\
+                    SELECT '0' as id,CONCAT('bkingapplication') as priv_code,'0' as parent_priv_code,'应用数据' as name,'' as 'uri','3' as 'type'  FROM dual\
                     UNION ALL \
-                    SELECT t1.app_id as id,CONCAT('bkingapplication-',t1.app_id) as priv_code,CONCAT('bkingapplication') as parent_priv_code,t1.app_name as name  from home_application_bkingapplication t1 "
+                    SELECT t1.app_id as id,CONCAT('bkingapplication-',t1.app_id) as priv_code,CONCAT('bkingapplication') as parent_priv_code,t1.app_name as name,'' as 'uri','3' as 'type'  from home_application_bkingapplication t1 "
         
         sqlbisapp = u" UNION ALL \
-                SELECT '0' as id,CONCAT('bkingbisapplicationrel') as priv_code,'0' as parent_priv_code,'业务应用关系数据' as name  FROM dual \
+                SELECT '0' as id,CONCAT('bkingbisapplicationrel') as priv_code,'0' as parent_priv_code,'业务应用关系数据' as name,'' as 'uri','3' as 'type'  FROM dual \
                 UNION ALL \
                 SELECT t1.id as id,CONCAT('bkingbisapplicationrel-',t1.id) as priv_code,CONCAT('bkingbisapplicationrel') as parent_priv_code, \
                 CONCAT('业务|',(SELECT t2.bis_name from home_application_bkingbusiness t2 where t2.bis_id=t1.bis_id),'-','应用|', \
-                (SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id)) as name \
+                (SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id)) as name,'' as 'uri','3' as 'type' \
                 from home_application_bkingbisapplicationrel t1 "
         
         sqlapphost = u" UNION ALL \
-                        SELECT '0' as id,CONCAT('bkingapplicationhostrel') as priv_code,'0' as parent_priv_code,'应用主机关系数据' as name  FROM dual \
+                        SELECT '0' as id,CONCAT('bkingapplicationhostrel') as priv_code,'0' as parent_priv_code,'应用主机关系数据' as name,'' as 'uri','3' as 'type'  FROM dual \
                         UNION ALL \
                         SELECT DISTINCT t1.id as id,CONCAT('bkingapplicationhostrel-',t1.id) as priv_code,CONCAT('bkingapplicationhostrel') as parent_priv_code, \
                         CONCAT('应用|',(SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id),'-','主机|', \
-                        (SELECT t2.host_ip from home_application_bkinghostaccount t2 where t2.host_account_id=t1.host_account_id)) as name \
+                        (SELECT t2.host_ip from home_application_bkinghostaccount t2 where t2.host_account_id=t1.host_account_id)) as name,'' as 'uri','3' as 'type' \
                         from home_application_bkingapplicationhostrel t1 "
         sql += sqlbis
         sql += sqlapp
@@ -802,41 +921,41 @@ def get_priv_by_user_code(login_code):
         return render_json({'code':True,'msg':"查询列表成功."
                             ,'list':  convert_objs_to_dicts(dicts)})
     elif int(flag) == int(1):#普通管理员，查询该业务系统下的所有资源
-        sql = u"select 0 as 'id',0 as 'priv_code',-1 as 'parent_priv_code','根资源' as 'name' FROM dual\
+        sql = u"select 0 as 'id',0 as 'priv_code',-1 as 'parent_priv_code','根资源' as 'name','' as 'uri','' as 'type' FROM dual\
                 UNION all\
-                select t1.id,t1.priv_code,t1.parent_priv_code,t1.priv_name from system_permission_bkingpriv t1,system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
+                select t1.id,t1.priv_code,t1.parent_priv_code,t1.priv_name,t1.priv_uri,t1.priv_type from system_permission_bkingpriv t1,system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = t1.priv_code and  t2.role_code = t3.role_code and t1.`status`=0 and t2.`status`=0 and t3.`status`=0 "
         
         sqlbis = u" UNION ALL \
-                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM ( SELECT '0' as id,CONCAT('bkingbusiness') as priv_code,'0' as parent_priv_code,'业务数据' as name  FROM dual \
+                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM ( SELECT '0' as id,CONCAT('bkingbusiness') as priv_code,'0' as parent_priv_code,'业务数据' as name,'' as 'uri','3' as 'type'  FROM dual \
                 UNION ALL \
-                SELECT DISTINCT t1.bis_id as id,CONCAT('bkingbusiness-',t1.bis_id) as priv_code,CONCAT('bkingbusiness') as parent_priv_code,t1.bis_name as name  from home_application_bkingbusiness t1) tt , \
+                SELECT DISTINCT t1.bis_id as id,CONCAT('bkingbusiness-',t1.bis_id) as priv_code,CONCAT('bkingbusiness') as parent_priv_code,t1.bis_name as name,'' as 'uri','3' as 'type'  from home_application_bkingbusiness t1) tt , \
                 system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code and  t2.role_code = t3.role_code and t2.`status`=0 and t3.`status`=0 "
         
         sqlapp = u" UNION ALL \
-                    SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM (SELECT '0' as id,CONCAT('bkingapplication') as priv_code,'0' as parent_priv_code,'应用数据' as name  FROM dual\
+                    SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM (SELECT '0' as id,CONCAT('bkingapplication') as priv_code,'0' as parent_priv_code,'应用数据' as name,'' as 'uri','3' as 'type'  FROM dual\
                     UNION ALL \
-                    SELECT DISTINCT t1.app_id as id,CONCAT('bkingapplication-',t1.app_id) as priv_code,CONCAT('bkingapplication') as parent_priv_code,t1.app_name as name  from home_application_bkingapplication t1) tt , \
+                    SELECT DISTINCT t1.app_id as id,CONCAT('bkingapplication-',t1.app_id) as priv_code,CONCAT('bkingapplication') as parent_priv_code,t1.app_name as name,'' as 'uri','3' as 'type'  from home_application_bkingapplication t1) tt , \
                 system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code and  t2.role_code = t3.role_code and t2.`status`=0 and t3.`status`=0 "
         
         sqlbisapp = u" UNION ALL \
-                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM (SELECT '0' as id,CONCAT('bkingbisapplicationrel') as priv_code,'0' as parent_priv_code,'业务应用关系数据' as name  FROM dual \
+                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM (SELECT '0' as id,CONCAT('bkingbisapplicationrel') as priv_code,'0' as parent_priv_code,'业务应用关系数据' as name,'' as 'uri','3' as 'type'  FROM dual \
                 UNION ALL \
                 SELECT DISTINCT t1.id as id,CONCAT('bkingbisapplicationrel-',t1.id) as priv_code,CONCAT('bkingbisapplicationrel') as parent_priv_code, \
                 CONCAT('业务|',(SELECT t2.bis_name from home_application_bkingbusiness t2 where t2.bis_id=t1.bis_id),'-','应用|', \
-                (SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id)) as name \
+                (SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id)) as name,'' as 'uri','3' as 'type' \
                 from home_application_bkingbisapplicationrel t1) tt , \
                 system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code and  t2.role_code = t3.role_code and t2.`status`=0 and t3.`status`=0 "
         
         sqlapphost = u" UNION ALL \
-                        SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM (SELECT '0' as id,CONCAT('bkingapplicationhostrel') as priv_code,'0' as parent_priv_code,'应用主机关系数据' as name  FROM dual \
+                        SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM (SELECT '0' as id,CONCAT('bkingapplicationhostrel') as priv_code,'0' as parent_priv_code,'应用主机关系数据' as name,'' as 'uri','3' as 'type'  FROM dual \
                         UNION ALL \
                         SELECT DISTINCT t1.id as id,CONCAT('bkingapplicationhostrel-',t1.id) as priv_code,CONCAT('bkingapplicationhostrel') as parent_priv_code, \
                         CONCAT('应用|',(SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id),'-','主机|', \
-                        (SELECT t2.host_ip from home_application_bkinghostaccount t2 where t2.host_account_id=t1.host_account_id)) as name \
+                        (SELECT t2.host_ip from home_application_bkinghostaccount t2 where t2.host_account_id=t1.host_account_id)) as name,'' as 'uri','3' as 'type' \
                         from home_application_bkingapplicationhostrel t1) tt , \
                 system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code and  t2.role_code = t3.role_code and t2.`status`=0 and t3.`status`=0 "
@@ -854,41 +973,41 @@ def get_priv_by_user_code(login_code):
         return render_json({'code':True,'msg':"查询列表成功."
                             ,'list':  convert_objs_to_dicts(dicts)})
     else:#非管理员
-        sql = u"select 0 as 'id',0 as 'priv_code',-1 as 'parent_priv_code','根资源' as 'name' FROM dual\
+        sql = u"select 0 as 'id',0 as 'priv_code',-1 as 'parent_priv_code','根资源' as 'name','' as 'uri','' as 'type' FROM dual\
                 UNION all\
-                select t1.id,t1.priv_code,t1.parent_priv_code,t1.priv_name from system_permission_bkingpriv t1,system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
+                select t1.id,t1.priv_code,t1.parent_priv_code,t1.priv_name,t1.priv_uri,t1.priv_type from system_permission_bkingpriv t1,system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = t1.priv_code and  t2.role_code = t3.role_code and t1.`status`=0 and t2.`status`=0 and t3.`status`=0 "
         
         sqlbis = u" UNION ALL \
-                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM ( SELECT '0' as id,CONCAT('bkingbusiness') as priv_code,'0' as parent_priv_code,'业务数据' as name  FROM dual \
+                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM ( SELECT '0' as id,CONCAT('bkingbusiness') as priv_code,'0' as parent_priv_code,'业务数据' as name,'' as 'uri','' as 'type'  FROM dual \
                 UNION ALL \
-                SELECT DISTINCT t1.bis_id as id,CONCAT('bkingbusiness-',t1.bis_id) as priv_code,CONCAT('bkingbusiness') as parent_priv_code,t1.bis_name as name  from home_application_bkingbusiness t1) tt , \
+                SELECT DISTINCT t1.bis_id as id,CONCAT('bkingbusiness-',t1.bis_id) as priv_code,CONCAT('bkingbusiness') as parent_priv_code,t1.bis_name as name,'' as 'uri','3' as 'type'  from home_application_bkingbusiness t1) tt , \
                 system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code and  t2.role_code = t3.role_code and t2.`status`=0 and t3.`status`=0 "
         
         sqlapp = u" UNION ALL \
-                    SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM (SELECT '0' as id,CONCAT('bkingapplication') as priv_code,'0' as parent_priv_code,'应用数据' as name  FROM dual\
+                    SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM (SELECT '0' as id,CONCAT('bkingapplication') as priv_code,'0' as parent_priv_code,'应用数据' as name,'' as 'uri','' as 'type'  FROM dual\
                     UNION ALL \
-                    SELECT DISTINCT t1.app_id as id,CONCAT('bkingapplication-',t1.app_id) as priv_code,CONCAT('bkingapplication') as parent_priv_code,t1.app_name as name  from home_application_bkingapplication t1) tt , \
+                    SELECT DISTINCT t1.app_id as id,CONCAT('bkingapplication-',t1.app_id) as priv_code,CONCAT('bkingapplication') as parent_priv_code,t1.app_name as name,'' as 'uri','3' as 'type'  from home_application_bkingapplication t1) tt , \
                 system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code and  t2.role_code = t3.role_code and t2.`status`=0 and t3.`status`=0 "
         
         sqlbisapp = u" UNION ALL \
-                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM (SELECT '0' as id,CONCAT('bkingbisapplicationrel') as priv_code,'0' as parent_priv_code,'业务应用关系数据' as name  FROM dual \
+                SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM (SELECT '0' as id,CONCAT('bkingbisapplicationrel') as priv_code,'0' as parent_priv_code,'业务应用关系数据' as name,'' as 'uri','' as 'type'  FROM dual \
                 UNION ALL \
                 SELECT DISTINCT t1.id as id,CONCAT('bkingbisapplicationrel-',t1.id) as priv_code,CONCAT('bkingbisapplicationrel') as parent_priv_code, \
                 CONCAT('业务|',(SELECT t2.bis_name from home_application_bkingbusiness t2 where t2.bis_id=t1.bis_id),'-','应用|', \
-                (SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id)) as name \
+                (SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id)) as name,'' as 'uri','3' as 'type' \
                 from home_application_bkingbisapplicationrel t1) tt , \
                 system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code and  t2.role_code = t3.role_code and t2.`status`=0 and t3.`status`=0 "
         
         sqlapphost = u" UNION ALL \
-                        SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name FROM (SELECT '0' as id,CONCAT('bkingapplicationhostrel') as priv_code,'0' as parent_priv_code,'应用主机关系数据' as name  FROM dual \
+                        SELECT tt.id,tt.priv_code,tt.parent_priv_code,tt.name,tt.uri,tt.type FROM (SELECT '0' as id,CONCAT('bkingapplicationhostrel') as priv_code,'0' as parent_priv_code,'应用主机关系数据' as name,'' as 'uri','' as 'type'  FROM dual \
                         UNION ALL \
                         SELECT DISTINCT t1.id as id,CONCAT('bkingapplicationhostrel-',t1.id) as priv_code,CONCAT('bkingapplicationhostrel') as parent_priv_code, \
                         CONCAT('应用|',(SELECT t2.app_name from home_application_bkingapplication t2 where t2.app_id=t1.app_id),'-','主机|', \
-                        (SELECT t2.host_ip from home_application_bkinghostaccount t2 where t2.host_account_id=t1.host_account_id)) as name \
+                        (SELECT t2.host_ip from home_application_bkinghostaccount t2 where t2.host_account_id=t1.host_account_id)) as name,'' as 'uri','3' as 'type' \
                         from home_application_bkingapplicationhostrel t1) tt , \
                 system_permission_bkingoprolegrant t2,system_permission_bkingroleprivgrant t3 \
                 where t3.priv_code = tt.priv_code and  t2.role_code = t3.role_code and t2.`status`=0 and t3.`status`=0 "
@@ -970,6 +1089,90 @@ def user_is_super(login_code):
     except Exception, e:
         logger.error('load object to BkingPriv is error:{}'.format(repr(e)))
     return 2
+
+def do_async_host_app(req):
+    user_name = req.user.username
+    if user_name == None or user_name == "":
+        return render_json({'code':False, 'msg':u"获取用户信息失败"})
+    get_user_ips(req)
+    
+def get_user_ips(request):
+    username = request.user.username  
+    host_ip = {};   
+    record = {};
+    records = {};
+    ret_text = "调用成功";
+    ret_code = True;
+    ret_num = 0;
+    if username == "":
+        return render_json({'result':False, 'ret_text':"未获取到用户信息"});
+    try: 
+        client = get_client_by_request(request)
+        apps = client.cc.get_app_by_user(username)
+        if apps.get('code') == 0:
+            app_num = 0;
+            for app in apps.get('data'):
+                app_id = app.get('ApplicationID')
+                app_name = app.get('ApplicationName')
+                app_num += 1;
+                kwargs = {
+                    "app_id":app_id 
+                }
+                hosts = client.cc.get_app_host_list(kwargs)
+                if hosts.get('code') == 0:
+                    record["app_id"] = app_id;
+                    record["app_name"] = app_name;
+                    host_ip.clear();
+                    for host in hosts.get('data'):
+                        osType = host.get('osType')
+                        if osType == "linux":
+                            InnerIP = host.get('InnerIP')
+                            Source = host.get('Source')
+                            host_ip[InnerIP] = Source;                               
+                    ret_num += len(host_ip.keys()); 
+                    record["host_ip"] = copy.deepcopy(host_ip);
+                records[str(app_id)] = copy.deepcopy(record);
+    except:
+        ret_code = False;
+        ret_text = "获取用户业务主机异常"
+        
+    if ret_num == 0:
+        ret_code = False;
+        ret_text = "没有查询到相关业务主机数据"
+         
+    return render_json({'result':ret_code, 'text':ret_text,  'renum':ret_num , 'list':records});
+
+def get_user_biz(request):
+    username = request.user.username
+    records =[]
+    ret_text = "调用成功"
+    ret_code = True
+    ret_num = 0
+    if username == "":
+        return render_json({'result':False, 'ret_text':"未获取到用户信息"})
+    try: 
+        client = get_client_by_request(request)
+        apps = client.cc.get_app_by_user(username)
+        if apps.get('code') == 0:
+            app_num = 0
+            for app in apps.get('data'):
+                app_id = app.get('ApplicationID')
+                app_name = app.get('ApplicationName')
+                ret_num += 1 
+                obj={}
+                #records[str(app_id)] = app_name
+                obj["buseName"] = app_name 
+                obj["buseId"] = app_id
+                records.append(obj)                
+    except:
+        ret_code = False
+        ret_text = "获取用户业务数据异常"
+        
+    if ret_num == 0:
+        ret_code = False
+        ret_text = "没有查询到相关业务"
+         
+    return render_json({'code':ret_code, 'text':ret_text,  'renum':ret_num , 'list':records})
     
 """
 ================业务操作end========================

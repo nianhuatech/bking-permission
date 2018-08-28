@@ -28,13 +28,13 @@
 
 	<body>
 		<div class="container">
-			<div class="nav_left menu">
+			<div class="nav_left menu" id="textType">
 				<div class="logo">
 					<p class="p">权限管理系统</p>
 				</div>
 				<ul>
 					<li class="nav1">
-						<a class="active" href="javascript:;">数据数据管理</a>
+						<a class="active" href="javascript:;" id="system_man1" onclick="navType()">系统管理</a>
 						<ul id="test" class="test" style="display: block;">
 							<li data="${SITE_URL}business_model/" class="li">
 								<a href="javascript:;">
@@ -63,7 +63,7 @@
 						</ul>
 					</li>
 					<li class="nav1 nav2">
-						<a href="javascript:;">系统管理</a>
+						<a href="javascript:;" id="system_man2">系统管理</a>
 						<ul id="test" class="test">
 							<li data="${SITE_URL}user_view/" class="li">
 								<a href="javascript:;">
@@ -137,8 +137,8 @@
 					$herf = $(this).attr('data');
 					$('#iframe').find('iframe').attr('src', $(this).attr('data'));
 		
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 

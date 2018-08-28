@@ -21,12 +21,14 @@ urlpatterns = patterns(
     # Django后台数据库管理
     url(r'^admin/', include(admin.site.urls)),
     # 用户登录鉴权--请勿修改
-    url(r'^account/', include('account.urls')),
+    #url(r'^account/', include('account.urls')),
     # 应用功能开关控制--请勿修改
-    url(r'^app_control/', include('app_control.urls')),
+    #url(r'^app_control/', include('app_control.urls')),
     # 在home_application(根应用)里开始开发你的应用的主要功能
     url(r'^', include('home_application.urls')),
     url(r'^', include('system_permission.urls')),
+    url(r'^', include('login.urls')),
+    url(r'^captcha', include('captcha.urls'))
 )
 
 

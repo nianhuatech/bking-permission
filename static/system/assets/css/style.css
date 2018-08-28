@@ -170,7 +170,6 @@ h5 {
 .nav-header {
   padding: 33px 25px;
   background-color: #2f4050;
-  background-image: url("patterns/header-profile.png");
 }
 .pace-done .nav-header {
   transition: all 0.4s;
@@ -1272,13 +1271,13 @@ button.dim:active:before {
 }
 /* TOOLTIPS */
 .tooltip-inner {
-  background-color: #2F4050;
+  background-color: #2F4050; 
 }
 .tooltip.top .tooltip-arrow {
-  border-top-color: #2F4050;
+  border-top-color: #2F4050; 
 }
 .tooltip.right .tooltip-arrow {
-  border-right-color: #2F4050;
+ border-right-color: #2F4050; 
 }
 .tooltip.bottom .tooltip-arrow {
   border-bottom-color: #2F4050;
@@ -3472,7 +3471,7 @@ body.tour-open .animated {
 }
 body {
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: #2f4050;
+  /* background-color: #2f4050; */
   font-size: 13px;
   color: #676a6c;
   overflow-x: hidden;
@@ -5764,7 +5763,7 @@ body.body-small .vote-icon {
   display: block;
 }
 .small-chat-box .heading {
-  background: #2f4050;
+  background: #2f4050; 
   padding: 8px 15px;
   font-weight: bold;
   color: #fff;
@@ -8551,3 +8550,8 @@ body.md-skin {
     margin: 0;
   }
 }
+
+#rrapp{
+	background-color: white;
+}
+body{margin:0; padding:0;}

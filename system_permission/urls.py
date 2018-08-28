@@ -13,10 +13,14 @@ from django.conf.urls import patterns
 
 urlpatterns = patterns(
     'system_permission.views',
-    #(r'^$', 'home'),
+    (r'^home/$', 'home'),
     (r'^user_view/$', 'user_view'),
     (r'^role_view/$', 'role_view'),
     (r'^menu_view/$', 'menu_view'),
+    (r'^host_app_mgr_view/$', 'host_app_mgr_view'),
+    (r'^dict_view/$', 'dict_view'),
+    (r'^chgPwd_view/$', 'chgPwd_view'),
+    (r'^home_view/$', 'home_view'),
     #业务操作接口------
     #新增角色操作
     (r'^do_add_role/$', 'do_add_role'),
@@ -56,19 +60,22 @@ urlpatterns = patterns(
     (r'^get_user_role/$', 'get_user_role'),
     #删除业务应用关系数据操作
     (r'^get_curr_user_role/$', 'get_curr_user_role'),
-#     #查询单个业务应用关系数据操作
-#     (r'^get_bis_application_rel/$', 'get_bis_application_rel'),
-#     #分页查询业务应用关系数据操作
-#     (r'^get_bis_application_rel_paging/$', 'get_bis_application_rel_paging'),
-#     #新增应用和主机账号关系数据操作
-#     (r'^do_add_application_host_rel/$', 'do_add_application_host_rel'),
-#     #修改应用和主机账号关系数据操作
-#     (r'^do_modify_application_host_rel/$', 'do_modify_application_host_rel'),
-#     #删除应用和主机账号关系数据操作
-#     (r'^do_del_application_host_rel/$', 'do_del_application_host_rel'),
-#     #查询单个应用和主机账号关系数据操作
-#     (r'^get_application_host_rel/$', 'get_application_host_rel'),
-#     #分页查询应用和主机账号关系数据操作
-#     (r'^get_application_host_rel_paging/$', 'get_application_host_rel_paging'),
+    #查询单个业务应用关系数据操作
+    (r'^do_async_host_app/$', 'do_async_host_app'),
+    #分页查询业务应用关系数据操作
+    (r'^do_add_user/$', 'do_add_user'),
+    #新增应用和主机账号关系数据操作
+    (r'^get_user/$', 'get_user'),
+    #修改应用和主机账号关系数据操作
+    (r'^do_modify_user/$', 'do_modify_user'),
+    #删除应用和主机账号关系数据操作
+    (r'^do_del_user/$', 'do_del_user'),
+    #查询单个应用和主机账号关系数据操作
+    (r'^do_lock_user/$', 'do_lock_user'),
+    #分页查询应用和主机账号关系数据操作
+    (r'^do_unlock_user/$', 'do_unlock_user'),
+    #分页查询应用和主机账号关系数据操作
+    (r'^updPwd/$', 'updPwd'),
+    (r'^chgPwd/$', 'chgPwd'),
     
 )

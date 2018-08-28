@@ -49,6 +49,7 @@ var Login = function() {
             },
 
             success : function(label) {
+            	debugger
                 label.closest('.form-group').removeClass('has-error');
                 label.remove();
             },
@@ -58,7 +59,7 @@ var Login = function() {
             },
 
             submitHandler : function(form) {
-            	//debugger
+            	debugger
                 var passwordInput = $('[name="password"]');
                 //passwordInput.val(sha256_digest(passwordInput.val()));
                 form.submit();
@@ -289,8 +290,8 @@ var Login = function() {
 //            handleForgetPassword();
 //            handleRegister();
 			
-            $.backstretch([ "assets/img/bg/1.jpg", "assets/img/bg/2.jpg",
-                    "assets/img/bg/3.jpg", "assets/img/bg/4.jpg" ], {
+            $.backstretch([ "/static/system/assets/img/bg/1.jpg", "/static/system/assets/img/bg/2.jpg",
+                    "/static/system/assets/img/bg/3.jpg", "/static/system/assets/img/bg/4.jpg" ], {
                 fade : 1000,
                 duration : 8000
             });

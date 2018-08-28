@@ -13,9 +13,11 @@ from django.conf.urls import patterns
 
 urlpatterns = patterns(
     'home_application.views',
-    (r'^$', 'index'),
-    (r'^dev-guide/$', 'dev_guide'),
-    (r'^login/$', 'login'),
+    #(r'^$', 'index'),
+    (r'^business_model/$', 'business_model'),
+    (r'^app_relationship_model/$', 'app_relationship_model'),
+    (r'^application_model/$', 'application_model'),
+    (r'^host_relational_model/$', 'host_relational_model'),
     (r'^contactus/$', 'contactus'),
     #业务操作接口------
     #新增业务操作
@@ -70,5 +72,11 @@ urlpatterns = patterns(
     (r'^get_application_host_rel/$', 'get_application_host_rel'),
     #分页查询应用和主机账号关系数据操作
     (r'^get_application_host_rel_paging/$', 'get_application_host_rel_paging'),
+    (r'^get_dict_class/$', 'get_dict_class'),
+    (r'^get_dict_type/$', 'get_dict_type'),
+    (r'^search_business/$', 'search_business'),
+    (r'^search_app_info/$', 'search_app_info'),
+    (r'^search_host/$', 'search_host'),
+    (r'^get_job_list/$', 'get_job_list'),
     
 )

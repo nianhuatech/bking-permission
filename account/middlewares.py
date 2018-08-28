@@ -21,6 +21,7 @@ class LoginMiddleware(object):
     """Login middleware."""
 
     def process_view(self, request, view, args, kwargs):
+        return None
         """process_view."""
         if getattr(view, 'login_exempt', False):
             return None

@@ -1,6 +1,5 @@
 <%inherit file="/sys_base.html"/>
-<script src="${STATIC_URL}js/csrftoken.js"></script>
-<div id="rrapp" v-cloak>
+<div style="background-color: white;" id="rrapp" v-cloak>
 	<div v-show="showList">
 		<div class="panel-body" style="margin-top: 0px;">
           <form class="form-inline">
@@ -18,22 +17,15 @@
         </div>
         
 		<div class="grid-btn" style="border:1px solid #F5F5F5">
-			<shiro:hasPermission name="rssysuser:save2333"> 
-				<a class="btn btn-primary" @click="asyncUser"><i class="fa fa-plus"></i>&nbsp;同步蓝鲸平台账号</a>
-			</shiro:hasPermission>
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a class="btn btn-primary" @click="asyncUser"><i class="fa fa-plus"></i>&nbsp;同步蓝鲸平台账号</a>
 			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			
-			<!-- <a class="btn btn-primary" @click="toLocked"><i class="fi-lock on"></i>&nbsp;锁定</a>
-			
-			<a class="btn btn-primary" @click="toUnLocked"><i class="fi-unlock"></i>&nbsp;解锁</a> -->
-			
-			<!-- <a class="btn btn-primary" @click="updatePassword"><i class="fa fa-pencil-square-o"></i>&nbsp;密码修改</a>
-			 -->
+			<a class="btn btn-primary" @click="toLocked"><i class="fi-lock on"></i>&nbsp;锁定</a>
+			<a class="btn btn-primary" @click="toUnLocked"><i class="fi-unlock"></i>&nbsp;解锁</a>
+			<a class="btn btn-primary" @click="updatePassword"><i class="fa fa-pencil-square-o"></i>&nbsp;密码修改</a>
 			<a class="btn btn-primary" @click="setRoles"><i class="fi-widget"></i>&nbsp;角色分配</a>
-			
 			<a class="btn btn-primary" @click="setMenus"><i class="fi-widget"></i>&nbsp;查看权限</a>
-			
-			<!-- <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a> -->
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
 			
 			<!-- <div class="btn-group mr5" >
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
@@ -58,77 +50,49 @@
 			<div class="form-group">
 				<div class="col-sm-2 control-label">登录名</div>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" v-model="user.loginName" placeholder="登录账号"/>
+					<input type="text" class="form-control" v-model="user.login_code" id = "login_code" placeholder="登录账号"/>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-sm-2 control-label">用户名</div>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" v-model="user.userName" placeholder="用户名"/>
+					<input type="text" class="form-control" v-model="user.op_name" placeholder="用户名"/>
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="col-sm-2 control-label">所属部门</div>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" style="cursor:pointer;" v-model="user.pName" @click="deptTree" readonly="readonly" placeholder="所属部门"/>
-				</div>
-			</div>
-			
-			<!-- <div class="form-group">
-				<div class="col-sm-2 control-label">所属部门</div>
-				<div class="col-sm-10"> -->
-					<!-- <div class="row"  id="selectOptions"> -->
-   						<!-- <div class="col-md-3">
-						<div class="dropdown">
-						    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						         {{title0}}
-						        <span class="caret"></span>
-						    </button>
-						    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-						        <li v-for="item in countrys"><a href="#" v-on:click="warn">{{item.country}}</a></li>
-						    </ul>
-						</div>
-						</div>
-						<div class="col-md-3">
-						    <div class="dropdown">
-						        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						            {{title2}}
-						            <span class="caret"></span>
-						        </button>
-						        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-						            <li v-for="item in items2"><a href="#" v-on:click="warn2">{{item.province}}</a></li>
-						        </ul>
-						    </div>
-						</div>
-						 
-						<div class="col-md-3">
-						    <div class="dropdown">
-						        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						            {{title3}}
-						            <span class="caret"></span>
-						        </button>
-						        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-						            <li v-for="item in items3"><a href="#" v-on:click="warn3">{{item.city}}</a></li>
-						        </ul>
-						    </div>
-						</div> -->
-						<!-- </div> -->
-				<!-- </div>
-			</div> -->
-			
-			<div class="form-group">
+			<div id="user_op_password"  class="form-group">
 				<div class="col-sm-2 control-label">密码</div>
 				<div class="col-sm-10">
-					<input type="password" id="password" class="form-control" v-model="user.password" placeholder="密码"/>
+					<input type="password" id="op_password" class="form-control" v-model="user.op_password" placeholder="密码"/>
 				</div>
 			</div>
-			<!-- 
 			<div class="form-group">
-				<div class="col-sm-2 control-label">密码确认</div>
+				<div class="col-sm-2 control-label">业务类别</div>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" v-model="user.password" placeholder="密码确认"/>
-				</div>
-			</div> -->
+				 <select class="selectpicker form-control bill_class" data-live-search="true" v-model="user.bill_class" name="bill_class"  id="bill_class"></span>
+				 </select>
+				 </div>
+            </div>
+            <div class="form-group">
+				<div class="col-sm-2 control-label">地市编码</div>
+				<div class="col-sm-10">
+				 <select class="selectpicker form-control region_id" data-live-search="true" v-model="user.region_id" name="region_id"  id="region_id"></span>
+				 </select>
+				 </div>
+            </div>
+            <div class="form-group">
+				<div class="col-sm-2 control-label">区县编码</div>
+				<div class="col-sm-10">
+				 <select class="selectpicker form-control county_id" data-live-search="true" v-model="user.county_id" name="county_id"  id="county_id"></span>
+				 </select>
+				 </div>
+            </div>
+            <div class="form-group">
+				<div class="col-sm-2 control-label">组织编码</div>
+				<div class="col-sm-10">
+				 <select class="selectpicker form-control org_id" data-live-search="true" v-model="user.org_id" name="org_id"  id="org_id"></span>
+				 </select>
+				 </div>
+            </div>
 			<div class="form-group">
 				<div class="col-sm-2 control-label">邮箱</div>
 				<div class="col-sm-10">
@@ -138,25 +102,23 @@
 			<div class="form-group">
 				<div class="col-sm-2 control-label">手机号</div>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" v-model="user.phone" placeholder="手机号"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-2 control-label">选择角色</div>
-				<div class="col-sm-10">
-					<label v-for="role in roleList" class="checkbox-inline">
-						<input type="checkbox" :value="role.id" v-model="user.roleList">{{role.name}}
-					</label>
+					<input type="text" class="form-control" v-model="user.phone_id" placeholder="手机号"/>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-sm-2 control-label">状态</div>
 				<label class="radio-inline">
-					<input type="radio" name="status" value="0" v-model="user.status"/> 正常
+					<input type="radio" name="status" checked value="0" v-model="user.status"/> 正常
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="status" value="1" v-model="user.status"/> 禁用
+					<input type="radio" name="status" value="1" v-model="user.status"/> 锁定
 				</label>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">备注</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="user.mark" placeholder="备注"/>
+				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-sm-2 control-label"></div>
@@ -174,15 +136,15 @@
 		    <span class="label label-success" style="vertical-align: bottom;">{{user.loginName}}:【{{user.userName}}】</span>
 		</div>
 		<div class="form-group">
-		   	<div class="col-sm-2 control-label">原密码</div>
+		   	<div class="col-sm-2 control-label">新密码</div>
 		   	<div class="col-sm-10">
-		      <input type="password" class="form-control" v-model="password" placeholder="原密码"/>
+		      <input type="password" class="form-control" v-model="op_password" placeholder="新密码"/>
 		    </div>
 		</div>
 		<div class="form-group">
-		   	<div class="col-sm-2 control-label">新密码</div>
+		   	<div class="col-sm-2 control-label">确认密码</div>
 		   	<div class="col-sm-10">
-		      <input type="password" class="form-control" v-model="newPassword" placeholder="新密码"/>
+		      <input type="password" class="form-control" v-model="newPassword" placeholder="确认密码"/>
 		    </div>
 		</div>
 	</div>
@@ -212,6 +174,7 @@
 	</div>
 </div>
 <script src="${STATIC_URL}system/statics/js/modules/gen/sysuser.js"></script>
+<script src="${STATIC_URL}js/csrftoken.js"></script>
 <script type="text/javascript">
 
 

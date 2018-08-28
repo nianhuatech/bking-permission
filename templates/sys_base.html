@@ -16,9 +16,10 @@
         <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/index.css?v=${STATIC_VERSION}"> -->
         <!-- 这个是全局配置，如果需要在js中使用app_id和site_url,则这个javascript片段一定要保留 -->
         <script type="text/javascript">
-	    	  var app_id = "${APP_ID}";
-			    var site_url = "${SITE_URL}";	  // app的url前缀,在ajax调用的时候，应该加上该前缀
-			    var static_url = "${STATIC_URL}"; // 静态资源前缀
+        	
+	    	var app_id = "${APP_ID}";
+			var site_url = "${SITE_URL}";	  // app的url前缀,在ajax调用的时候，应该加上该前缀
+			var static_url = "${STATIC_URL}"; // 静态资源前缀
 	      </script>
     </%block>
   </head>
@@ -91,11 +92,11 @@
     <script src="${STATIC_URL}js/csrftoken.js"></script>
     <!-- <link rel="stylesheet" href="${STATIC_URL}system/statics/css/style.default.css"> -->
 	<link href="${STATIC_URL}system/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-	<link href="${STATIC_URL}system/assets/plugins/bootstrap/css/bootstrap-override.css" rel="stylesheet" type="text/css"/>
-	<link href="${STATIC_URL}system/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+	<!-- <link href="${STATIC_URL}system/assets/plugins/bootstrap/css/bootstrap-override.css" rel="stylesheet" type="text/css"/> -->
+	<!-- <link href="${STATIC_URL}system/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/> -->
 	
 	<!-- 主 CSS files -->
-	<!-- <link id="loadBefore" href="${STATIC_URL}system/assets/css/style.css" rel="stylesheet"> -->
+	<link id="loadBefore" href="${STATIC_URL}system/assets/css/style.css" rel="stylesheet">
 	<!--弹出层样式-->
 	<link href="${STATIC_URL}system/assets/plugins/toastr/toastr.min.css" rel="stylesheet">
 	<link href="${STATIC_URL}system/assets/plugins/bootstarp-dialog/css/bootstrap-dialog.css" rel="stylesheet">
@@ -128,7 +129,6 @@
 	<script src="${STATIC_URL}system/assets/plugins/pace/pace.min.js"></script>
 	<!-- jQuery UI -->
 	<script src="${STATIC_URL}system/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
-	<script src="${STATIC_URL}system/assets/olmt_js/layer/layer.js"></script>
 	<script src="${STATIC_URL}system/assets/plugins/toastr/toastr.min.js" type="text/javascript"></script>
 	<!-- <script src="${STATIC_URL}system/assets/plugins/bootstarp-dialog/js/bootstrap-dialog.js" type="text/javascript"></script> -->
 	<!-- Sparkline å°å¾-->

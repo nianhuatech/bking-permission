@@ -12,13 +12,18 @@ $(function () {
 			{ label: '邮箱', name: 'email', index: 'email', width: 80 }, 
 			{ label: '创建时间', name: 'create_date', index: 'create_date', width: 80}, 
 			{ label: '状态', name: 'status', index: 'status',width: 60, formatter: function(value, options, row){
-				return value != 0 ? 
-					'<span class="label label-danger">无效</span>' : 
-					'<span class="label label-success">有效</span>';
+				if (value == 0){
+					return '<span class="label label-success">有效</span>';
+				}else if(value == 1){
+					return '<span class="label label-lock">锁定</span>';
+				}else if(value == 2){
+					return '<span class="label label-danger">无效</span>' ;
+				}
+					
 			}},
         ],
 		viewrecords: true,
-        height: $(window).height()-300,
+        height: $(window).height()-130,
         rowNum: 10,
 		rowList : [10,30,50],
         rownumbers: true, 
@@ -140,30 +145,16 @@ var vm = new Vue({
         title:null,
         roleList:{},
         user:{
-            status:1,
-            orgId:null,
-            pName:null,
-            roleList:[]
+            status:0,
+            org_id:null,
+            bill_class:null,
+            region_id:null,
+            county_id:null,
         },
-        password:'',
+        op_password:'',
 		newPassword:''
-        /*preTitle:"联动下拉框",
-        title0:"中心",
-        title2:"地市",
-        title3:"路段",
-        countrys:[
-            {country:"中国"},
-            {country:"美国"},
-            {country:"日本"}
-        ],
-        items2:[],
-        items3:[]*/
-        
     },
     methods: {
-    	warn:toSelect2,
-        warn2:toSelect3,
-        warn3:recordSelect3,
         query: function () {
         	$("#jqGrid").jqGrid('setGridParam',{ 
                 postData:{
@@ -173,28 +164,20 @@ var vm = new Vue({
                 },
                 page:1 
             }).trigger("reloadGrid");
-           // vm.reload();
         },
         exportGrid:function(){
-        	//alert(vm.q.userName);
         	var paras=$("#jqGrid").jqGrid("getGridParam");
-        	//paras = paras.substring(paras.indexOf("?"));
-    		//paras = encodeURI(paras);
-        	//alert(paras);
         },
         add: function(){
             vm.showList = false;
             vm.title = "新增";
             vm.roleList = {};
-            vm.user = {pName:null, id:null, status:1, roleList:[]};
-
-            //获取角色信息
-            this.getRoleList();
-
-            vm.getDept();
+            $("#user_op_password").css("display","");
+            $("#login_code").css("readonly","");
+            vm.user = {op_id:null, status:0,org_id:'',bill_class:'',region_id:'',county_id:''};
         },
         asyncUser: function(){
-        	//加载部门树
+        	//同步蓝鲸账号数据
             $.post(site_url+'do_async_operator/', function(r){
             	debugger
                 if(r.code){
@@ -226,13 +209,11 @@ var vm = new Vue({
             if(userId == null){
                 return ;
             }
-            $("#password").attr("readonly","readonly");
+            $("#user_op_password").css("display","none");
+            $("#login_code").attr("readonly","readonly");
             vm.showList = false;
             vm.title = "修改";
-
             vm.getUser(userId);
-            //获取角色信息
-            this.getRoleList();
         },
         toLocked: function () {
             var userIds = getSelectedRows();
@@ -242,11 +223,13 @@ var vm = new Vue({
             confirm('确定要锁定选中的用户吗？', function(){
 	            $.ajax({
 	                type: "POST",
-	                url: site_url+'/rest/rssysuser/locked',
-	                contentType: "application/json",
-	                data: JSON.stringify(userIds),
+	                traditional:true,
+                    url: site_url+"do_lock_user/",
+                    dataType:'json',
+                    async: true,
+                    data:{userIds:userIds},
 	                success: function(r){
-	                    if(r.code == 0){
+	                    if(r.code){
 	                        alert('用户锁定成功', function(){
 	                            vm.reload();
 	                        });
@@ -266,11 +249,13 @@ var vm = new Vue({
 
             $.ajax({
                 type: "POST",
-                url: site_url+'/rest/rssysuser/unlocked',
-                contentType: "application/json",
-                data: JSON.stringify(userIds),
+                traditional:true,
+                url: site_url+"do_unlock_user/",
+                dataType:'json',
+                async: true,
+                data:{userIds:userIds},
                 success: function(r){
-                    if(r.code == 0){
+                    if(r.code){
                         alert('解锁成功', function(){
                             vm.reload();
                         });
@@ -295,20 +280,20 @@ var vm = new Vue({
 				content: jQuery("#passwordLayer"),
 				btn: ['修改','取消'],
 				btn1: function (index) {
-					var data = "password="+vm.password+"&newPassword="+vm.newPassword+"&user_id="+vm.user.id;
+					var data = "op_password="+vm.op_password+"&newPassword="+vm.newPassword+"&op_id="+vm.user.op_id;
 					$.ajax({
 						type: "POST",
-					    url: site_url+'/rest/rssysuser/updPwd',
+					    url: site_url+'updPwd/',
 					    data: data,
 					    dataType: "json",
 					    success: function(result){
-							if(result.code == 0){
+							if(result.code){
 								layer.close(index);
-								layer.alert('修改成功', function(index){
+								alert('修改成功', function(index){
 									vm.reload();
 								});
 							}else{
-								layer.alert(result.msg);
+								alert(result.msg);
 							}
 						}
 					});
@@ -320,13 +305,14 @@ var vm = new Vue({
             if(userIds == null){
                 return ;
             }
-
             confirm('确定要删除选中的记录？', function(){
                 $.ajax({
                     type: "POST",
-                    url: site_url+'/rest/rssysuser/delete',
-                    contentType: "application/json",
-                    data: JSON.stringify(userIds),
+                    traditional:true,
+                    url: site_url+"do_del_user/",
+                    dataType:'json',
+                    async: true,
+                    data:{userIds:userIds},
                     success: function(r){
                         if(r.code == 0){
                             alert('操作成功', function(){
@@ -340,30 +326,26 @@ var vm = new Vue({
             });
         },
         saveOrUpdate: function () {
-            var url = vm.user.id == null ? "/save" : "/update";
-            $.ajax({
-                type: "POST",
-                url: site_url+'/rest/rssysuser' + url,
-                contentType: "application/json",
-                data: JSON.stringify(vm.user),
-                success: function(r){
-                    if(r.code === 0){
-                        alert('操作成功', function(){
-                            vm.reload();
-                        });
-                    }else{
-                        alert(r.msg);
-                    }
-                }
-            });
+            var url = vm.user.op_id == null ? "do_add_user/" : "do_modify_user/";
+            $.post(site_url+url,vm.user,function(res){
+        		if (res.code) {	
+        			alert('操作成功', function(){
+                        vm.reload();
+                    });
+        		}else {
+        			alert(res.msg);
+        		}
+        	}, 'json');
         },
         getUser: function(userId){
-            $.get(site_url+'/rest/rssysuser/info/'+userId, function(r){
-                vm.user = r.user;
-                debugger
-                vm.user.password = null;
-
-                vm.getDept();
+            $.post(site_url+'get_user/',{id:userId}, function(r){
+            	if(r.code){
+            		vm.user = r.list[0];
+                    vm.user.password = null;
+            	}else{
+            		alert(r.msg);
+            	}
+                
             });
         },
         getRoleList: function(){
@@ -527,28 +509,30 @@ var vm = new Vue({
     }
 });
 
-function toSelect2(event){
-	   vm.items2=[];
-	   var content=event.target.text;
-	   vm.title=content;
-	   var provinces=[{province:"江苏省"},{province:"浙江省"},{province:"上海市"}];
-	   for(var item in provinces){
-	       vm.items2.push(provinces[item]);
-	   }
-	}
+$(document).ready(function () {
+	setSelectData("get_dict_type","bill_class");
+	setSelectData("get_dict_class","region_id");
+	setSelectData("get_dict_type","county_id");
+	setSelectData("get_dict_class","org_id");
+});
 
-	function toSelect3(event){
-	    vm.items3=[];
-
-	    var content=event.target.text;
-	    vm.title2=content;
-	    var citys=[{city:"南京市"},{city:"无锡市"},{city:"苏州市"}];
-	    for(var item in citys){
-	        vm.items3.push( citys[item]);
-	    }
-	}
-
-	function recordSelect3(event){
-	    var content=event.target.text;
-	    vm.title3=content;
-	}
+function setSelectData(code, objId) {
+	$.ajax({
+		type: "POST",
+        url: site_url+code+'/',
+        dataType:'json',
+        async: true,
+        data:{},
+	    success : function(r) {    
+	    	var data = r.list;  
+	    	var opts = "";  
+	    	opts += "<option selected value=''>----------请选择----------</option>";
+	    	for( var index = 0 ; index < data.length; index++ ){  
+	    		var d = data[index];  
+	    		opts += "<option value='"+d.dict_code+"'>"+d.dict_name+"</option>";  
+	    	}
+	    	// 查询界面  
+	    	$("."+objId).append(opts);    
+	  }    
+	});
+}

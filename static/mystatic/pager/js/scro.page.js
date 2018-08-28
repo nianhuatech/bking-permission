@@ -296,7 +296,7 @@
 		if((pageNumber<=0||pageNumber>this.totalPage)&&!ch_sel){
 			return;
 		}
-		window.parent.showLayerLoading("数据加载中...",60000);
+		//window.parent.showLayerLoading("数据加载中...",60000);
 		var self = this, p = this.p;
 		if(typeof(pageNumer)==undefined && typeof(pageNumber)!='number') pageNumber = self.pageNumber;
 		if(pageNumber == -1) return;

@@ -34,7 +34,7 @@ class BkingOperator(models.Model):
     phone_id=models.CharField(u"手机号",max_length=255,null=True,blank=True)
     status=models.IntegerField(u"账号状态",choices=gender, default=0)
     create_date=models.DateTimeField(u"创建时间",auto_now_add=True)
-    create_op=models.CharField(u"创建人",max_length=10)
+    create_op=models.CharField(u"创建人",max_length=20)
     upd_date=models.DateTimeField(u"修改时间",auto_now = True)
     mark=models.CharField(u"备注",max_length=1000,null=True,blank=True)
     

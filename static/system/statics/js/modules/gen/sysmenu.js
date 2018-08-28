@@ -146,7 +146,7 @@ var vm = new Vue({
             }
             //debugger
             //菜单
-            if(vm.menu.priv_type === 1 && isBlank(vm.menu.priv_url) && vm.menu.parent_priv_code !=0){
+            if(vm.menu.priv_type === 1 && isBlank(vm.menu.priv_uri) && vm.menu.parent_priv_code !=0){
                 alert("菜单URL不能为空");
                 return true;
             }
@@ -213,7 +213,7 @@ $(function () {
     table.setCodeField("priv_code");
     table.setParentCodeField("parent_priv_code");
     table.setExpandAll(false);
-    table.setHeight($(window).height()-200);
+    table.setHeight($(window).height()-120);
     table.init();
     Menu.table = table;
 });

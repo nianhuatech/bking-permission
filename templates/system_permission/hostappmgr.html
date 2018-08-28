@@ -19,9 +19,9 @@
         
 		<div class="grid-btn" style="border:1px solid #F5F5F5">
 			<shiro:hasPermission name="rssysuser:save2333"> 
-				<a class="btn btn-primary" @click="asyncUser"><i class="fa fa-plus"></i>&nbsp;同步蓝鲸平台账号</a>
+				<a class="btn btn-primary" @click="asyncUser"><i class="fa fa-plus"></i>&nbsp;同步主机信息</a>
 			</shiro:hasPermission>
-			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<!-- <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a> -->
 			
 			<!-- <a class="btn btn-primary" @click="toLocked"><i class="fi-lock on"></i>&nbsp;锁定</a>
 			
@@ -29,9 +29,9 @@
 			
 			<!-- <a class="btn btn-primary" @click="updatePassword"><i class="fa fa-pencil-square-o"></i>&nbsp;密码修改</a>
 			 -->
-			<a class="btn btn-primary" @click="setRoles"><i class="fi-widget"></i>&nbsp;角色分配</a>
+			<!-- <a class="btn btn-primary" @click="setRoles"><i class="fi-widget"></i>&nbsp;角色分配</a>
 			
-			<a class="btn btn-primary" @click="setMenus"><i class="fi-widget"></i>&nbsp;查看权限</a>
+			<a class="btn btn-primary" @click="setMenus"><i class="fi-widget"></i>&nbsp;查看权限</a> -->
 			
 			<!-- <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a> -->
 			
@@ -211,7 +211,7 @@
 		<ul id="roleTree" class="ztree"></ul>
 	</div>
 </div>
-<script src="${STATIC_URL}system/statics/js/modules/gen/sysuser.js"></script>
+<script src="${STATIC_URL}system/statics/js/modules/gen/hostappmgr.js"></script>
 <script type="text/javascript">
 
 

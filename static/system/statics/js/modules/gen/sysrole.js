@@ -20,7 +20,7 @@ $(function () {
 			{ label: '最后修改时间', name: 'upd_date', index: 'upd_date', width: 80 }, 			
         ],
         viewrecords: true,
-        height: $(window).height()-300,
+        height: $(window).height()-130,
         rowNum: 10,
         rowList : [10,30,50],
         rownumbers: true,

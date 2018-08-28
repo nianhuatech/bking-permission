@@ -36,7 +36,7 @@ APP_TOKEN = '4540c16b-890e-4109-a3f0-ab196f0ab7c4'
 BK_PAAS_HOST = 'http://paas.nianhuatech.com:7002'
 
 # 请求官方 API 默认版本号，可选值为："v2" 或 ""；其中，"v2"表示规范化API，""表示未规范化API
-DEFAULT_BK_API_VER = ''
+DEFAULT_BK_API_VER = 'v2'
 
 # 是否启用celery任务
 IS_USE_CELERY = True
@@ -120,6 +120,9 @@ INSTALLED_APPS = (
     'account',
     'home_application',
     'system_permission',
+    'login',
+    'captcha',
+    'custom_atoms',
 )
 
 # ==============================================================================
@@ -328,3 +331,26 @@ LOGGING = {
         },
     }
 }
+
+
+# django_simple_captcha 验证码配置   
+# 格式  
+CAPTCHA_OUTPUT_FORMAT = u'%(text_field)s %(hidden_field)s %(image)s'  
+# 噪点样式  
+CAPTCHA_NOISE_FUNCTIONS = (
+    'captcha.helpers.noise_null', # 没有样式  
+    'captcha.helpers.noise_arcs', # 线  
+    #'captcha.helpers.noise_dots', # 点  
+)  
+# 图片大小  
+CAPTCHA_IMAGE_SIZE = (100, 33)  
+CAPTCHA_BACKGROUND_COLOR = '#ffffff'  
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge' # 图片中的文字为随机英文字母，如 mdsh  
+#CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'    # 图片中的文字为数字表达式，如1+2=</span>  
+      
+CAPTCHA_LENGTH = 5 # 字符个数  
+CAPTCHA_TIMEOUT = 1 # 超时(minutes)
+
+#SESSION 设置
+SESSION_COOKIE_AGE = 60 * 30                 # Session的cookie失效日期（2周）（默认）
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True                  # 是否关闭浏览器使得Session过期（默认）
